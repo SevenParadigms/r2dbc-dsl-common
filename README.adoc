@@ -1,0 +1,12 @@
+# R2DBC-DSL-COMMON
+
+This library provides common models and utilites for `R2DBC-DSL`.
+
+[source,xml]
+----
+<dependency>
+  <groupId>io.github.sevenparadigms</groupId>
+  <artifactId>spring-data-r2dbc-dsl-common</artifactId>
+  <version>3.1.1</version>
+</dependency>
+----

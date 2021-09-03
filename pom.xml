@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>io.github.sevenparadigms</groupId>
+	<artifactId>spring-data-r2dbc-dsl-common</artifactId>
+	<version>3.1.1</version>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>9</version>
+	</parent>
+
+	<name>Spring Data R2DBC DSL Common</name>
+	<description>Common library for Spring Data DSL</description>
+	<url>https://github.com/SevenParadigms/r2dbc-dsl-common.git</url>
+	<inceptionYear>2021</inceptionYear>
+	<organization>
+		<name>SevenParadigms™</name>
+	</organization>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<comments>Copyright © 2020 the original author or authors.
+
+				Licensed under the Apache License, Version 2.0 (the "License");
+				you may not use this file except in compliance with the License.
+				You may obtain a copy of the License at
+
+				https://www.apache.org/licenses/LICENSE-2.0
+
+				Unless required by applicable law or agreed to in writing, software
+				distributed under the License is distributed on an "AS IS" BASIS,
+				WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+				implied.
+				See the License for the specific language governing permissions and
+				limitations under the License.</comments>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>lao.tsing</id>
+			<name>Lao Tsing</name>
+			<email>lao.tsing@outlook.com</email>
+			<organization>Eclipse Foundation</organization>
+			<roles>
+				<role>System architect</role>
+			</roles>
+			<timezone>+3</timezone>
+		</developer>
+	</developers>
+	<scm>
+		<url>https://github.com/SevenParadigms/r2dbc-dsl-common.git</url>
+		<connection>scm:git:https://github.com/SevenParadigms/r2dbc-dsl-common.git</connection>
+		<developerConnection>scm:git:https://github.com/SevenParadigms/r2dbc-dsl-common.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<properties>
+		<spring.core>5.3.9</spring.core>
+		<java.version>11</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<jackson.version>2.12.5</jackson.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.core}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.core}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${jackson.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-parameter-names</artifactId>
+			<version>${jackson.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jdk8</artifactId>
+			<version>${jackson.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.9</version>
+			<scope>compile</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<compilerArgument>-parameters</compilerArgument>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>3.1.1</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<show>public</show>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.2.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.8</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+							<stagingProgressTimeoutMinutes>30</stagingProgressTimeoutMinutes>
+							<keepStagingRepositoryOnFailure>true</keepStagingRepositoryOnFailure>
+							<keepStagingRepositoryOnCloseRuleFailure>true</keepStagingRepositoryOnCloseRuleFailure>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
