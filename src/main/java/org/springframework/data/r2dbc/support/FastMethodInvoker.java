@@ -10,10 +10,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 
-public class FastMethodInvoker {
-    public static final String UUID_REGEX = "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}";
+/**
+ * Utilities for json interaction.
+ *
+ * @author Lao Tsing
+ */
+public final class FastMethodInvoker {
+    public static final String UUID_REGEX = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
     public static final String NUMBER_REGEX = "^\\d+$";
-    public static final String FLOAT_REGEX = "\\d+\\.\\d+";
+    public static final String DOUBLE_REGEX = "\\d+\\.\\d+";
 
     private static final ConcurrentMap<Class<?>, List<Field>> reflectionStorage = new ConcurrentReferenceHashMap<>(720);
     private static final ConcurrentMap<String, FastMethod> methodStorage = new ConcurrentReferenceHashMap<>(720);
@@ -45,7 +50,7 @@ public class FastMethodInvoker {
         return isField(any.getClass(), name);
     }
 
-    public static Boolean isField(Class cls, String name) {
+    public static Boolean isField(Class<?> cls, String name) {
         for (Field field : FastMethodInvoker.reflectionStorage(cls)) {
             if (field.getName().equals(name)) return true;
         }
@@ -68,20 +73,15 @@ public class FastMethodInvoker {
         return target;
     }
 
-
     public static Map<String, ?> getMapValues(Object any) {
         Map<String, Object> map = new HashMap<>();
-        FastMethodInvoker.reflectionStorage(any.getClass()).forEach(field -> {
-            map.put(field.getName(), getValue(field, field.getName()));
-        });
+        FastMethodInvoker.reflectionStorage(any.getClass()).forEach(field -> map.put(field.getName(), getValue(field, field.getName())));
         return map;
     }
 
     public static Map<String, ?> getMapValues(Collection<?> collection, String keyName, String valueName) {
         Map<String, Object> map = new HashMap<>();
-        collection.forEach(it -> {
-            map.put((String) getValue(it, keyName), getValue(it, valueName));
-        });
+        collection.forEach(it -> map.put((String) getValue(it, keyName), getValue(it, valueName)));
         return map;
     }
 
@@ -157,7 +157,7 @@ public class FastMethodInvoker {
 
     public static Object convertObject(final String object) {
         if (object.matches(NUMBER_REGEX)) return Long.parseLong(object);
-        if (object.matches(FLOAT_REGEX)) return Double.parseDouble(object);
+        if (object.matches(DOUBLE_REGEX)) return Double.parseDouble(object);
         if (Arrays.asList(Boolean.TRUE.toString(), Boolean.FALSE.toString()).contains(object.toLowerCase()))
             return Boolean.TRUE.toString().equalsIgnoreCase(object);
         if (object.matches(UUID_REGEX)) return UUID.fromString(object);
