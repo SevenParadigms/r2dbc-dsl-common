@@ -47,6 +47,26 @@ public class Dsl {
         return decodedQuery;
     }
 
+    public String getLang() {
+        return lang;
+    }
+
+    public String[] getFields() {
+        return fields;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
     public boolean isPaged() {
         return page != -1 && size != -1;
     }
