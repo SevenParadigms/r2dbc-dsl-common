@@ -13,26 +13,31 @@ public class Dsl {
     public static final String idProperty = "id";
 
     public static Dsl create() {
-        return new Dsl("");
+        return new Dsl(null, null, null, null, null, null);
     }
 
-    public Dsl(final String query) {
-        this.query = query;
+    public Dsl(final String query, final Integer page, final Integer size, final String sort, final String lang, final String fields) {
+        this.query = query != null ? query : "";
+        this.page = page != null ? page : -1;
+        this.size = size != null ? size : -1;
+        this.sort = sort != null ? sort : "";
+        this.lang = lang != null ? lang : "english";
+        this.fields = fields != null ? fields.split(",") : new String[0];
     }
 
     public String query;
-    public String lang = "english";
-    public String[] fields = new String[0];
-    public Integer page = -1;
-    public Integer size = -1;
-    public String sort = "";
+    public String lang;
+    public String[] fields;
+    public Integer page;
+    public Integer size;
+    public String sort;
 
     public String getQuery() {
         String decodedQuery = null;
         try {
             decodedQuery = URLDecoder.decode(query, UTF_8.displayName()).trim();
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return decodedQuery;
     }
@@ -89,7 +94,7 @@ public class Dsl {
 
     public Dsl id(UUID id) {
         if (id != null) {
-            query = start(query) + idProperty + "=='" + id + "'::uuid";
+            query = start(query) + idProperty + "==" + id;
         }
         return this;
     }
