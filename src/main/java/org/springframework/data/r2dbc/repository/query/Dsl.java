@@ -13,17 +13,14 @@ public class Dsl {
     public static final String idProperty = "id";
 
     public static Dsl create() {
-        return new Dsl();
-    }
-
-    public Dsl() {
+        return new Dsl("");
     }
 
     public Dsl(final String query) {
         this.query = query;
     }
 
-    public String query = "";
+    public String query;
     public String lang = "english";
     public String[] fields = new String[0];
     public Integer page = -1;
