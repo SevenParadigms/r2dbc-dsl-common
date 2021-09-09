@@ -1,5 +1,6 @@
 package org.springframework.data.r2dbc.repository.query;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
@@ -12,7 +13,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @author Lao Tsing
  */
-public class Dsl {
+public class Dsl implements Serializable {
     public static final String idProperty = "id";
 
     public static Dsl create() {
