@@ -139,8 +139,4 @@ public abstract class JsonUtils {
         }
         return list;
     }
-
-    public static <T> String toJsonString(final Object object) {
-        return objectToJson(object).toString();
-    }
 }
