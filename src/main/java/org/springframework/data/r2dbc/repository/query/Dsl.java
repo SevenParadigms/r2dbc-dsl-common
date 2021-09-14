@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -15,6 +16,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public class Dsl implements Serializable {
     public static final String idProperty = "id";
+    public static final String comma = ",";
+    public static final String space = " ";
 
     public static Dsl create() {
         return new Dsl(null, null, null, null, null, null);
@@ -26,7 +29,7 @@ public class Dsl implements Serializable {
         this.size = size != null ? size : -1;
         this.sort = sort != null ? sort : "";
         this.lang = lang != null ? lang : "english";
-        this.fields = fields != null ? fields.split(",") : new String[0];
+        this.fields = fields != null ? fields.split(comma) : new String[0];
     }
 
     private String query;
@@ -40,7 +43,7 @@ public class Dsl implements Serializable {
         String decodedQuery = null;
         if (query != null) {
             try {
-                decodedQuery = URLDecoder.decode(query, UTF_8.displayName()).trim();
+                decodedQuery = URLDecoder.decode(query.trim(), UTF_8.displayName());
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
@@ -84,7 +87,7 @@ public class Dsl implements Serializable {
 
     public Dsl sorting(String field, String ascDesc) {
         if (!sort.isEmpty()) {
-            sort += ",";
+            sort += comma;
         }
         sort += (field + ":" + ascDesc);
         return this;
@@ -97,30 +100,42 @@ public class Dsl implements Serializable {
         return this;
     }
 
-    public Dsl in(String field, Set<Long> ids) {
-        if (field != null && !ids.isEmpty()) {
-            query = start(query) + field + "##" + ids.stream().map(Object::toString).collect(Collectors.joining(" "));
+    public Dsl fields(String...fields) {
+        if (fields != null) {
+            this.fields = fields;
         }
         return this;
     }
 
-    public Dsl notIn(String field, Set<Long> ids) {
-        if (field != null && !ids.isEmpty()) {
-            query = start(query) + field + "!#" + ids.stream().map(Object::toString).collect(Collectors.joining(" "));
+    public Dsl in(String field, Long...ids) {
+        if (field != null && ids != null && ids.length > 0) {
+            query = start(query) + field + "##" + Stream.of(ids).map(Object::toString).collect(Collectors.joining(space));
+        }
+        return this;
+    }
+
+    public Dsl notIn(String field, Long...ids) {
+        if (field != null  && ids != null && ids.length > 0) {
+            query = start(query) + field + "!#" + Stream.of(ids).map(Object::toString).collect(Collectors.joining(space));
         }
         return this;
     }
 
     public Dsl id(UUID id) {
-        if (id != null) {
-            query = start(query) + idProperty + "==" + id;
-        }
-        return this;
+        return equals(idProperty, id);
     }
 
     public Dsl id(Long id) {
-        if (id != null) {
-            query = start(query) + idProperty + "==" + id;
+        return equals(idProperty, id);
+    }
+
+    public Dsl id(Integer id) {
+        return equals(idProperty, id);
+    }
+
+    public Dsl equals(String field, Object value) {
+        if (field != null) {
+            query = start(query) + field + "==" + value;
         }
         return this;
     }
@@ -128,15 +143,6 @@ public class Dsl implements Serializable {
     public Dsl isTrue(String field) {
         if (field != null) {
             query = start(query) + field;
-        }
-        return this;
-    }
-
-    public Dsl equals(String field, Object value) {
-        if (field != null) {
-            query = start(query) + field + "==";
-            if (value instanceof Number) query += value;
-            else query += value;
         }
         return this;
     }
@@ -207,11 +213,18 @@ public class Dsl implements Serializable {
         return this;
     }
 
+    public Dsl fts(String field, String filter) {
+        if (filter != null) {
+            query = start(query) + field + "@@" + filter.trim();
+        }
+        return this;
+    }
+
     private String start(String string) {
         if (string.trim().isEmpty())
             return "";
         else
-            return string + ",";
+            return string + comma;
     }
 
     public List<String> getResultFields() {
