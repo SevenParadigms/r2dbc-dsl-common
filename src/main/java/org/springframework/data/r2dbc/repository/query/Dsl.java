@@ -28,7 +28,7 @@ public class Dsl implements Serializable {
         this.page = page != null ? page : -1;
         this.size = size != null ? size : -1;
         this.sort = sort != null ? sort : "";
-        this.lang = lang != null ? lang : "english";
+        this.lang = lang != null ? lang : "";
         this.fields = fields != null ? fields.split(comma) : new String[0];
     }
 
