@@ -8,6 +8,4 @@ fun ByteArray.encode() = Base64.getMimeEncoder().encode(this)
 
 fun ByteArray.decode() = Base64.getMimeDecoder().decode(this)
 
-fun ByteArray.convertString() = String(this)
-
 fun String.loadResource() = Files.readAllBytes(ResourceUtils.getFile("classpath:$this").toPath())
