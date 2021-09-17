@@ -8,6 +8,6 @@ fun Any.getMapValues(): Map<String, Any?> =
 fun Collection<Any>.convertMap(keyName: String, valueName: String): Map<String, Any?> =
     this.associate { it.getValue(keyName) as String to it.getValue(valueName) as Any }
 
-fun <S> Any.setValue(name: String, value: S?) = FastMethodInvoker.setValue(this, name, value)
+fun Any.setValue(name: String, value: Any) = FastMethodInvoker.setValue(this, name, value)
 
 fun Any.getValue(name: String): Any? = FastMethodInvoker.getValue(this, name)
