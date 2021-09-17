@@ -107,6 +107,13 @@ public class Dsl implements Serializable {
         return this;
     }
 
+    public Dsl lang(String lang) {
+        if (lang != null) {
+            this.lang = lang;
+        }
+        return this;
+    }
+
     public Dsl in(String field, Long...ids) {
         if (field != null && ids != null && ids.length > 0) {
             query = start(query) + field + "##" + Stream.of(ids).map(Object::toString).collect(Collectors.joining(space));
