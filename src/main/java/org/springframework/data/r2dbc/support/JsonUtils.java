@@ -23,31 +23,28 @@ import java.util.*;
  * @author Lao Tsing
  */
 public abstract class JsonUtils {
-    private static final ThreadLocal<ObjectMapper> OBJECT_MAPPER_THREAD_LOCAL = ThreadLocal.withInitial(() -> {
-        final var mapper = new ObjectMapper();
-        final var javaTimeModule = new JavaTimeModule();
+    private static final ObjectMapper OBJECT_MAPPER;
+    static {
+        var javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(ZonedDateTime.class, new ZonedDateTimeSerializer(DateTimeFormatter.ISO_ZONED_DATE_TIME));
         javaTimeModule.addDeserializer(ZonedDateTime.class, InstantDeserializer.ZONED_DATE_TIME);
-        mapper.registerModule(javaTimeModule);
-        mapper.registerModule(new Jdk8Module());
-        mapper.registerModule(new ParameterNamesModule());
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        mapper.configure(DeserializationFeature.FAIL_ON_MISSING_EXTERNAL_TYPE_ID_PROPERTY, false);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNRESOLVED_OBJECT_IDS, false);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
-        mapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-        mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-        mapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        mapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
-        return mapper;
-    });
+        OBJECT_MAPPER = new ObjectMapper()
+                .registerModule(javaTimeModule)
+                .registerModule(new Jdk8Module())
+                .registerModule(new ParameterNamesModule())
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+                .configure(DeserializationFeature.FAIL_ON_MISSING_EXTERNAL_TYPE_ID_PROPERTY, false)
+                .configure(DeserializationFeature.FAIL_ON_UNRESOLVED_OBJECT_IDS, false)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(DeserializationFeature.WRAP_EXCEPTIONS, false)
+                .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
+                .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+    }
 
     public static ObjectMapper getMapper() {
-        return OBJECT_MAPPER_THREAD_LOCAL.get();
+        return OBJECT_MAPPER;
     }
 
     public static JsonNode mapToJson(final Map<String, Object> map) {
@@ -59,18 +56,18 @@ public abstract class JsonUtils {
     }
 
     public static Map<String, ?> jsonToMap(final JsonNode json) {
-        final var map = new LinkedHashMap<String, Object>();
-        final var fieldNames = json.fieldNames();
+        var map = new LinkedHashMap<String, Object>();
+        var fieldNames = json.fieldNames();
         while (fieldNames.hasNext()) {
-            final var fieldName = fieldNames.next();
-            final var jsonNode = json.get(fieldName);
+            var fieldName = fieldNames.next();
+            var jsonNode = json.get(fieldName);
             map.put(fieldName, nodeToObject(jsonNode));
         }
         return map;
     }
 
     public static Object nodeToObject(final JsonNode json) {
-        final var type = json.getNodeType();
+        var type = json.getNodeType();
         switch (type) {
             case ARRAY:
                 var array = new ArrayList<>();

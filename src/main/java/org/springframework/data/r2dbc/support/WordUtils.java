@@ -11,8 +11,8 @@ import org.springframework.util.StringUtils;
  */
 public abstract class WordUtils {
     public static String sqlToCamel(final String sqlName) {
-        final var parts = sqlName.split("_");
-        final var camelCaseString = new StringBuilder(parts[0]);
+        var parts = sqlName.split("_");
+        var camelCaseString = new StringBuilder(parts[0]);
         if (parts.length > 1) {
             for (int i = 1; i < parts.length; i++) {
                 if (parts[i] != null && parts[i].trim().length() > 0)
