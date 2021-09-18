@@ -1,6 +1,6 @@
 # R2DBC-DSL-COMMON
 
-This library provides common models and utilites for `R2DBC-DSL`.
+Library provides common models and utils for `R2DBC-DSL`.
 
 [source,xml]
 ----
