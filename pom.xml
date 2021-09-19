@@ -62,7 +62,7 @@
 	</scm>
 
 	<properties>
-		<spring.core>5.3.9</spring.core>
+		<spring.core>5.3.10</spring.core>
 		<kotlin.version>1.5.30</kotlin.version>
 		<java.version>11</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
