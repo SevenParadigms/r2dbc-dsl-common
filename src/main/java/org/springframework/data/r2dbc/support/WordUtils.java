@@ -26,14 +26,6 @@ public abstract class WordUtils {
         return camel.replaceAll("[A-Z]", "_$0").toLowerCase();
     }
 
-    public static String dotToCamel(final String dotter) {
-        return sqlToCamel(dotToSql(dotter));
-    }
-
-    public static String dotToSql(final String dotter) {
-        return dotter.replaceAll("\\.", "_");
-    }
-
     public static String trimInline(final String text) {
         return text.replaceAll("[\\s\\n]", " ");
     }
