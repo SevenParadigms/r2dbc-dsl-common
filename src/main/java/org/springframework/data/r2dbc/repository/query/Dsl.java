@@ -3,11 +3,14 @@ package org.springframework.data.r2dbc.repository.query;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.StringUtils.SPACE;
 
 /**
  * Model for web-querying and criteria dsl building
@@ -17,7 +20,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class Dsl implements Serializable {
     public static final String idProperty = "id";
     public static final String comma = ",";
-    public static final String space = " ";
 
     public static Dsl create() {
         return new Dsl(null, null, null, null, null, null);
@@ -116,14 +118,14 @@ public class Dsl implements Serializable {
 
     public Dsl in(String field, Long...ids) {
         if (field != null && ids != null && ids.length > 0) {
-            query = start(query) + field + "##" + Stream.of(ids).map(Object::toString).collect(Collectors.joining(space));
+            query = start(query) + field + "##" + Stream.of(ids).map(Object::toString).collect(Collectors.joining(SPACE));
         }
         return this;
     }
 
     public Dsl notIn(String field, Long...ids) {
         if (field != null  && ids != null && ids.length > 0) {
-            query = start(query) + field + "!#" + Stream.of(ids).map(Object::toString).collect(Collectors.joining(space));
+            query = start(query) + field + "!#" + Stream.of(ids).map(Object::toString).collect(Collectors.joining(SPACE));
         }
         return this;
     }

@@ -5,7 +5,7 @@
 
 	<groupId>io.github.sevenparadigms</groupId>
 	<artifactId>spring-data-r2dbc-dsl-common</artifactId>
-	<version>3.5.3</version>
+	<version>3.5.4</version>
 
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -63,7 +63,7 @@
 
 	<properties>
 		<spring.core>5.3.10</spring.core>
-		<kotlin.version>1.5.30</kotlin.version>
+		<kotlin.version>1.5.31</kotlin.version>
 		<java.version>11</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
@@ -125,7 +125,14 @@
 		<dependency>
 			<groupId>io.github.sevenparadigms</groupId>
 			<artifactId>spring-data-r2dbc-dsl</artifactId>
-			<version>3.4.0</version>
+			<version>3.5.3</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>5.3.10</version>
 			<scope>compile</scope>
 		</dependency>
 
