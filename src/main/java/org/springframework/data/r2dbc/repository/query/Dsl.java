@@ -1,5 +1,7 @@
 package org.springframework.data.r2dbc.repository.query;
 
+import org.springframework.data.r2dbc.support.SQLInjectionSafe;
+
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -84,7 +86,7 @@ public class Dsl implements Serializable {
     }
 
     public boolean isSorted() {
-        return sort != null && !sort.isEmpty() && sort.contains(":");
+        return !sort.isEmpty() && sort.contains(":");
     }
 
     public Dsl sorting(String field, String ascDesc) {
@@ -117,14 +119,14 @@ public class Dsl implements Serializable {
     }
 
     public Dsl in(String field, Long...ids) {
-        if (field != null && ids != null && ids.length > 0) {
+        if (field != null && ids.length > 0) {
             query = start(query) + field + "##" + Stream.of(ids).map(Object::toString).collect(Collectors.joining(SPACE));
         }
         return this;
     }
 
     public Dsl notIn(String field, Long...ids) {
-        if (field != null  && ids != null && ids.length > 0) {
+        if (field != null && ids.length > 0) {
             query = start(query) + field + "!#" + Stream.of(ids).map(Object::toString).collect(Collectors.joining(SPACE));
         }
         return this;
@@ -143,7 +145,7 @@ public class Dsl implements Serializable {
     }
 
     public Dsl equals(String field, Object value) {
-        if (field != null) {
+        if (field != null && value != null) {
             query = start(query) + field + "==" + value;
         }
         return this;
@@ -164,47 +166,51 @@ public class Dsl implements Serializable {
     }
 
     public Dsl notEquals(String field, Object value) {
-        if (field != null) {
+        if (field != null && value != null) {
             query = start(query) + field + "!=" + value;
         }
         return this;
     }
 
     public Dsl greaterThan(String field, Long value) {
-        if (field != null) {
+        if (field != null && value != null) {
             query = start(query) + field + ">>" + value;
         }
         return this;
     }
 
     public Dsl greaterThanOrEquals(String field, Long value) {
-        if (field != null) {
+        if (field != null && value != null) {
             query = start(query) + field + ">=" + value;
         }
         return this;
     }
 
     public Dsl lessThan(String field, Long value) {
-        if (field != null) {
+        if (field != null && value != null) {
             query = start(query) + field + "<<" + value;
         }
         return this;
     }
 
     public Dsl lessThanOrEquals(String field, Long value) {
-        if (field != null) {
+        if (field != null && value != null) {
             query = start(query) + field + "<=" + value;
         }
         return this;
     }
 
     public Dsl isNull(String field) {
-        query = start(query) + "@" + field;
+        if (field != null) {
+            query = start(query) + "@" + field;
+        }
         return this;
     }
 
     public Dsl isNotNull(String field) {
-        query = start(query) + "!@" + field;
+        if (field != null) {
+            query = start(query) + "!@" + field;
+        }
         return this;
     }
 
@@ -216,14 +222,14 @@ public class Dsl implements Serializable {
     }
 
     public Dsl fts(String filter) {
-        if (filter != null) {
+        if (SQLInjectionSafe.throwElse(filter)) {
             query = start(query) + "tsv@@" + filter.trim();
         }
         return this;
     }
 
     public Dsl fts(String field, String filter) {
-        if (filter != null) {
+        if (field != null && SQLInjectionSafe.throwElse(filter)) {
             query = start(query) + field + "@@" + filter.trim();
         }
         return this;
