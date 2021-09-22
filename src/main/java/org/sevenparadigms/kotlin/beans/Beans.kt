@@ -45,17 +45,18 @@ class Beans : ApplicationContextAware {
             bean
         })
 
-        fun <T> register(beanType: Class<T>, vararg args: Any?) {
+        fun <T> register(bean: T, vararg args: Any?) {
             val context = of(GenericWebApplicationContext::class.java)!!
             val definition = GenericBeanDefinition()
-            definition.setBeanClass(beanType)
+            definition.source = bean
+            definition.setBeanClass(bean!!::class.java)
             if (args.isNotEmpty()) {
                 val chunkedList = args.asList().chunked(2)
                 for (chunk in chunkedList) {
                     definition.propertyValues.add(chunk.first() as String, chunk.last())
                 }
             }
-            context.registerBeanDefinition(beanType.simpleName, definition)
+            context.registerBeanDefinition(bean!!::class.java.simpleName, definition)
         }
 
         fun getProperty(name: String, vararg defaultValue: String): String {
