@@ -2,16 +2,16 @@ package org.sevenparadigms.kotlin.beans
 
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
-import org.springframework.beans.factory.support.GenericBeanDefinition
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
+import org.springframework.context.support.GenericApplicationContext
 import org.springframework.util.ConcurrentReferenceHashMap
-import org.springframework.web.context.support.GenericWebApplicationContext
 import java.util.concurrent.Callable
 import java.util.concurrent.ConcurrentMap
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.locks.ReentrantReadWriteLock
+import java.util.function.Supplier
 
 class Beans : ApplicationContextAware {
     override fun setApplicationContext(applicationContext: ApplicationContext) {
@@ -24,6 +24,7 @@ class Beans : ApplicationContextAware {
         private var applicationContext: ApplicationContext? = null
         private const val awaitDelay = 50
 
+        @JvmStatic
         fun <T> of(beanType: Class<T>): T? = cache(beanType, Callable<T> {
             var bean: T? = getApplicationContext().getBean(beanType)
             val counter = AtomicInteger(awaitDelay)
@@ -45,20 +46,19 @@ class Beans : ApplicationContextAware {
             bean
         })
 
+        @JvmStatic
         fun <T> register(bean: T, vararg args: Any?) {
-            val context = of(GenericWebApplicationContext::class.java)!!
-            val definition = GenericBeanDefinition()
-            definition.source = bean
-            definition.setBeanClass(bean!!::class.java)
-            if (args.isNotEmpty()) {
-                val chunkedList = args.asList().chunked(2)
-                for (chunk in chunkedList) {
-                    definition.propertyValues.add(chunk.first() as String, chunk.last())
-                }
-            }
-            context.registerBeanDefinition(bean!!::class.java.simpleName, definition)
+            val context = of(GenericApplicationContext::class.java)!!
+            context.registerBean(bean!!::class.java, args)
         }
 
+        @JvmStatic
+        fun <T> register(bean: T) {
+            val context = of(GenericApplicationContext::class.java)!!
+            context.registerBean(bean!!::class.java, Supplier<T> { bean })
+        }
+
+        @JvmStatic
         fun getProperty(name: String, vararg defaultValue: String): String {
             lock.readLock().lock()
             try {
@@ -71,6 +71,7 @@ class Beans : ApplicationContextAware {
             }
         }
 
+        @JvmStatic
         fun <T> getProperty(name: String, target: Class<T>, vararg defaultValue: T): T {
             lock.readLock().lock()
             return try {
@@ -97,7 +98,8 @@ class Beans : ApplicationContextAware {
             }
         }
 
-        private fun getApplicationContext(): ApplicationContext {
+        @JvmStatic
+        fun getApplicationContext(): ApplicationContext {
             if (applicationContext == null) {
                 val counter = AtomicInteger(awaitDelay * 2)
                 lock.writeLock().lock()
