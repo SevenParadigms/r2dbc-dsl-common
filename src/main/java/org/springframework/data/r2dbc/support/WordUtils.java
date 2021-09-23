@@ -35,4 +35,8 @@ public abstract class WordUtils {
                 .filteredBy(CharacterPredicates.DIGITS, CharacterPredicates.LETTERS)
                 .build().generate(size);
     }
+
+    public static String lastOctet(String fieldName) {
+        return fieldName.contains(".") ? fieldName.substring(fieldName.lastIndexOf(".") + 1) : fieldName;
+    }
 }
