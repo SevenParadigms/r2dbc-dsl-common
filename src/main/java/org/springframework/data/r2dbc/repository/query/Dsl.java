@@ -222,10 +222,7 @@ public class Dsl implements Serializable {
     }
 
     public Dsl fts(String filter) {
-        if (SQLInjectionSafe.throwElse(filter)) {
-            query = start(query) + "tsv@@" + filter.trim();
-        }
-        return this;
+        return fts("tsv", filter);
     }
 
     public Dsl fts(String field, String filter) {
