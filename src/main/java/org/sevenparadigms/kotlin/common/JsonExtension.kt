@@ -10,3 +10,5 @@ fun <T> String.parseJson(cls: Class<T>): T = JsonUtils.jsonToObject(this, cls)
 fun <T> JsonNode.parseJson(cls: Class<T>): T = JsonUtils.jsonToObject(this, cls)
 
 fun <T> JsonNode.toList(cls: Class<T>) = JsonUtils.jsonToList(this, cls)
+
+fun <T> JsonNode.singleQuotes() = this.toString().replace("\"", "'")

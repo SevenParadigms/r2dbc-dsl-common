@@ -1,6 +1,7 @@
 package org.springframework.data.r2dbc.support;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,7 +16,9 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Utilities for json interaction.
@@ -40,7 +43,8 @@ public abstract class JsonUtils {
                 .configure(DeserializationFeature.WRAP_EXCEPTIONS, false)
                 .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
                 .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
-                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
     }
 
     public static ObjectMapper getMapper() {
