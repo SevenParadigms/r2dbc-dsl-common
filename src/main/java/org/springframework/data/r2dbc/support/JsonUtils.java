@@ -55,10 +55,6 @@ public abstract class JsonUtils {
         return getMapper().valueToTree(map);
     }
 
-    public static Map<String, ?> objectToMap(final Object object) {
-        return getMapper().convertValue(object, Map.class);
-    }
-
     public static Map<String, ?> jsonToMap(final JsonNode json) {
         var map = new LinkedHashMap<String, Object>();
         var fieldNames = json.fieldNames();
@@ -121,8 +117,12 @@ public abstract class JsonUtils {
         return getMapper().convertValue(json, cls);
     }
 
-    public static <T> T jsonToObject(final String json, final Class<T> cls) {
-        return getMapper().convertValue(json, cls);
+    public static <T> T stringToObject(final String json, final Class<T> cls) {
+        try {
+            return getMapper().readValue(json, getMapper().getTypeFactory().constructType(cls));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Cannot convert to object", e);
+        }
     }
 
     public static <T> ArrayList<T> jsonToList(final JsonNode json, final Class<T> cls) {
