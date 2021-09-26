@@ -5,7 +5,7 @@
 
 	<groupId>io.github.sevenparadigms</groupId>
 	<artifactId>spring-data-r2dbc-dsl-common</artifactId>
-	<version>3.6.2</version>
+	<version>3.6.3</version>
 
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -68,6 +68,7 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<jackson.version>2.12.5</jackson.version>
+		<r2dbc-dsl.version>3.6.2</r2dbc-dsl.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -125,7 +126,7 @@
 		<dependency>
 			<groupId>io.github.sevenparadigms</groupId>
 			<artifactId>spring-data-r2dbc-dsl</artifactId>
-			<version>3.5.3</version>
+			<version>${r2dbc-dsl.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
