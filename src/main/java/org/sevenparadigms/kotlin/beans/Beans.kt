@@ -5,7 +5,9 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.context.support.GenericApplicationContext
+import org.springframework.data.r2dbc.support.FastMethodInvoker
 import org.springframework.util.ConcurrentReferenceHashMap
+import java.lang.reflect.Constructor
 import java.util.concurrent.Callable
 import java.util.concurrent.ConcurrentMap
 import java.util.function.Supplier
@@ -45,19 +47,22 @@ class Beans : ApplicationContextAware {
         }
 
         @JvmStatic
-        fun <T> getProperty(name: String, target: Class<T>, vararg defaultValue: T): T? {
+        fun <T> getProperty(name: String, target: Class<T>, vararg defaultValue: T): T {
             return try {
-                getApplicationContext()?.environment?.getProperty(name, target)
+                getApplicationContext()!!.environment.getProperty(name, target)!!
             } catch (e: Exception) {
                 return if (defaultValue.isNotEmpty()) defaultValue.first()
                 else
                     when (target) {
                         String::class.java -> StringUtils.EMPTY as T
-                        Int::class.java -> 0 as T
+                        Number::class.java -> -1 as T
                         Boolean::class.java -> false as T
-                        else -> null
+                        else -> try {
+                            target.getConstructor().newInstance()
+                        } catch (e: java.lang.Exception) {
+                            throw RuntimeException(e)
+                        }
                     }
-
             }
         }
 

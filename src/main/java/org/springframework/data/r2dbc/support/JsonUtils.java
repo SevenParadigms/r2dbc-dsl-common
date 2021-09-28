@@ -125,7 +125,7 @@ public abstract class JsonUtils {
         }
     }
 
-    public static <T> ArrayList<T> jsonToList(final JsonNode json, final Class<T> cls) {
+    public static <T> ArrayList<T> jsonToObjectList(final JsonNode json, final Class<T> cls) {
         var list = new ArrayList<T>();
         var maps = JsonUtils.jsonToObject(json, ArrayList.class);
         for (Object map : maps) {
