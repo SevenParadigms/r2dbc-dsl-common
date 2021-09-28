@@ -63,6 +63,7 @@
 
 	<properties>
 		<spring.core>5.3.10</spring.core>
+		<spring.boot>2.5.5</spring.boot>
 		<kotlin.version>1.5.31</kotlin.version>
 		<kotlinx.version>1.5.2-native-mt</kotlinx.version>
 		<java.version>11</java.version>
@@ -121,6 +122,13 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${spring.core}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+			<version>${spring.boot}</version>
 			<scope>compile</scope>
 		</dependency>
 

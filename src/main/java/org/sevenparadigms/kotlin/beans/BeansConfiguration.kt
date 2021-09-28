@@ -2,6 +2,7 @@ package org.sevenparadigms.kotlin.beans
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.r2dbc.spi.ConnectionFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -18,6 +19,7 @@ class BeansConfiguration {
     fun beans() = Beans()
 
     @Bean
+    @ConditionalOnBean(ConnectionFactory::class)
     fun transactionManager(connectionFactory: ConnectionFactory) =
         R2dbcTransactionManager(connectionFactory) as ReactiveTransactionManager
 
