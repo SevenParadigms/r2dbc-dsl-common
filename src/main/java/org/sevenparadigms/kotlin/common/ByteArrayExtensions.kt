@@ -1,7 +1,6 @@
 package org.sevenparadigms.kotlin.common
 
 import org.springframework.util.ResourceUtils
-import java.nio.charset.Charset
 import java.nio.file.Files
 import java.util.*
 
