@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -108,7 +109,7 @@ public class Dsl implements Serializable {
         return this;
     }
 
-    public Dsl fields(String...fields) {
+    public Dsl fields(String... fields) {
         if (fields != null) {
             this.fields = fields;
         }
@@ -122,18 +123,34 @@ public class Dsl implements Serializable {
         return this;
     }
 
-    public Dsl in(String field, Long...ids) {
+    public Dsl in(String field, Long... ids) {
         if (field != null && ids.length > 0) {
             query = start(query) + field + "##" + Stream.of(ids).map(Object::toString).collect(Collectors.joining(SPACE));
         }
         return this;
     }
 
-    public Dsl notIn(String field, Long...ids) {
+    public Dsl notIn(String field, Long... ids) {
         if (field != null && ids.length > 0) {
             query = start(query) + field + "!#" + Stream.of(ids).map(Object::toString).collect(Collectors.joining(SPACE));
         }
         return this;
+    }
+
+    public Dsl id(String id) {
+        return equals(idProperty, id);
+    }
+
+    public Dsl id(UUID id) {
+        return equals(idProperty, id);
+    }
+
+    public Dsl id(Long id) {
+        return equals(idProperty, id);
+    }
+
+    public Dsl id(Integer id) {
+        return equals(idProperty, id);
     }
 
     public Dsl id(Object id) {

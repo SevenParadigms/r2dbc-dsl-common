@@ -95,21 +95,23 @@ public abstract class JsonUtils {
         }
     }
 
+    public static JsonNode objectToJson(final String string) {
+        try {
+            return getMapper().readTree(string);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static JsonNode objectToJson(final byte[] bytes) {
+        try {
+            return getMapper().readTree(bytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static JsonNode objectToJson(final Object object) {
-        if (object instanceof String) {
-            try {
-                return getMapper().readTree((String) object);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        if (object instanceof byte[]) {
-            try {
-                return getMapper().readTree((byte[]) object);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
         return getMapper().convertValue(object, JsonNode.class);
     }
 
