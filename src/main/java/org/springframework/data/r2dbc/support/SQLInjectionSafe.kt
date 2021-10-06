@@ -20,7 +20,7 @@ object SQLInjectionSafe {
         if (!ObjectUtils.isEmpty(query)) {
             val cleanQuery = URLDecoder.decode(query, Charsets.UTF_8)
             if (regex.matcher(cleanQuery).matches()) {
-                throw IllegalArgumentException("SQL Injection Detected")
+                throw RuntimeException("SQL Injection Detected")
             }
         }
         return true

@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * Utilities for json interaction.
+ * Utilities for reflection interaction.
  *
  * @author Lao Tsing
  */

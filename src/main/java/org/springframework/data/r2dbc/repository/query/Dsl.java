@@ -153,10 +153,6 @@ public class Dsl implements Serializable {
         return equals(idProperty, id);
     }
 
-    public Dsl id(Object id) {
-        return equals(idProperty, id);
-    }
-
     public Dsl equals(String field, Object value) {
         if (field != null && value != null) {
             query = start(query) + field + "==" + value;
@@ -245,13 +241,6 @@ public class Dsl implements Serializable {
         return this;
     }
 
-    private String start(String string) {
-        if (string.trim().isEmpty())
-            return "";
-        else
-            return string + comma;
-    }
-
     public List<String> getResultFields() {
         if (fields.length > 0) {
             return List.of(fields);
@@ -261,5 +250,12 @@ public class Dsl implements Serializable {
 
     public void setResultFields(List<String> fields) {
         this.fields = fields.toArray(new String[0]);
+    }
+
+    private String start(String string) {
+        if (string.trim().isEmpty())
+            return "";
+        else
+            return string + comma;
     }
 }
