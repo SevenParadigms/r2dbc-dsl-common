@@ -112,7 +112,6 @@
 			<artifactId>kotlinx-coroutines-core</artifactId>
 			<version>${kotlinx.version}</version>
 			<scope>compile</scope>
-			<optional>true</optional>
 		</dependency>
 
 		<dependency>
@@ -120,7 +119,6 @@
 			<artifactId>kotlinx-coroutines-reactor</artifactId>
 			<version>${kotlinx.version}</version>
 			<scope>compile</scope>
-			<optional>true</optional>
 		</dependency>
 
 		<dependency>
