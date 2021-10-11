@@ -27,7 +27,7 @@ public abstract class WordUtils {
     }
 
     public static String trimInline(final String text) {
-        return text.replaceAll("(\\s\\n)", " ");
+        return text.replaceAll("(\\s+\\n|\\n|\\s+)", " ");
     }
 
     public static String generateString(final int size) {
