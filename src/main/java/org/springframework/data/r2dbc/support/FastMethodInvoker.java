@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentMap;
 public final class FastMethodInvoker {
     public static final String UUID_REGEX = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
     public static final String NUMBER_REGEX = "^\\d+$";
-    public static final String DOUBLE_REGEX = "\\d+\\.\\d+";
+    public static final String DOUBLE_REGEX = "^\\d+\\.\\d+$";
 
     private static final ConcurrentMap<Class<?>, List<Field>> reflectionStorage = new ConcurrentReferenceHashMap<>(720);
     private static final ConcurrentMap<String, FastMethod> methodStorage = new ConcurrentReferenceHashMap<>(720);
@@ -161,6 +161,6 @@ public final class FastMethodInvoker {
         if (Arrays.asList(Boolean.TRUE.toString(), Boolean.FALSE.toString()).contains(object.toLowerCase()))
             return Boolean.TRUE.toString().equalsIgnoreCase(object);
         if (object.matches(UUID_REGEX)) return UUID.fromString(object);
-        return null;
+        return object;
     }
 }

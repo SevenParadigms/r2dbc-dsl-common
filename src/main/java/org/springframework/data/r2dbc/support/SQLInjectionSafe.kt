@@ -6,14 +6,17 @@ import java.net.URLDecoder
 import java.util.regex.Pattern
 
 object SQLInjectionSafe {
-    private val SQL = """TABLE|TABLESPACE|PROCEDURE|FUNCTION|TRIGGER|VIEW|LIBRARY|REFERENCES|FROM|
-            SELECT|INSERT|UPDATE|DELETE|TRUNCATE|USAGE| DATABASE|INDEX|CONSTRAINT|TRIGGER|SET|
+    private val mnemonic = """TABLE|TABLESPACE|PROCEDURE|FUNCTION|TRIGGER|VIEW|LIBRARY|REFERENCES|FROM|
+            SELECT|INSERT|UPDATE|DELETE|TRUNCATE|USAGE|DATABASE|INDEX|CONSTRAINT|TRIGGER|SET|
             USER|SCHEMA|SQL|WORK|TRANSACTION|OPTION|COMMENT|SYNONYM|TYPE|SESSION|USER|ROLE|
             PACKAGE|BODY|OPERATOR|CASCADE|SEQUENCE|RESTORE|POINT|FILE|CLASS|CURSOR|OBJECT|
             RULE|DATASET|STORE|COLUMN|FIELD|HTTP|NULL|SLEEP|VERSION|PRIVILEGES|PROGRAM""".remove("[\\r\\n]")
 
-    private val regex = Pattern.compile("(.*)(;|UNION)([\\s\\r\\n])(COPY|DBLINK|GRANT|LOCK|TRUNCATE|WITH|ALTER|CREATE|DELETE|DROP|EXEC(UTE){0,1}|" +
-            "INSERT|UPSERT|MERGE|SELECT|JOIN|UPDATE)(.*)('(.*)'| \\* |\\(([\\s\\r\\n])'|${SQL})(.*)", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
+    private val regex = Pattern.compile(
+        "(.*)(;|UNION)([\\s\\r\\n])(COPY|DBLINK|GRANT|LOCK|TRUNCATE|WITH|ALTER|" +
+                "CREATE|DELETE|DROP|EXEC(UTE)?|INSERT|UPSERT|MERGE|SELECT|JOIN|UPDATE)(.*)('(.*)'|" +
+                " \\* |\\(([\\s\\r\\n])'|${mnemonic})(.*)", Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE
+    )
 
     @JvmStatic
     fun throwElse(query: String): Boolean {
