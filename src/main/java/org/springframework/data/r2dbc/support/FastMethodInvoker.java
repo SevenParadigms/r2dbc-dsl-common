@@ -1,5 +1,6 @@
 package org.springframework.data.r2dbc.support;
 
+import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.cglib.reflect.FastClass;
 import org.springframework.cglib.reflect.FastMethod;
 import org.springframework.util.ConcurrentReferenceHashMap;
@@ -38,11 +39,11 @@ public final class FastMethodInvoker {
         }
     }
 
-    public static FastMethod getFastMethod(String classKey) {
+    public static FastMethod getCacheMethod(String classKey) {
         return methodStorage.get(classKey);
     }
 
-    public static void setFastMethod(String classKey, FastMethod fastMethod) {
+    public static void setCacheMethod(String classKey, FastMethod fastMethod) {
         methodStorage.put(classKey, fastMethod);
     }
 
@@ -90,10 +91,10 @@ public final class FastMethodInvoker {
             if (field.getName().equals(name)) {
                 String methodName = "set" + StringUtils.capitalize(name);
                 String fastMethodKey = any.getClass().getName() + "." + methodName;
-                FastMethod fastMethod = FastMethodInvoker.getFastMethod(fastMethodKey);
+                FastMethod fastMethod = FastMethodInvoker.getCacheMethod(fastMethodKey);
                 if (fastMethod == null) {
                     fastMethod = FastClass.create(any.getClass()).getMethod(methodName, new Class[] { field.getType() });
-                    FastMethodInvoker.setFastMethod(fastMethodKey, fastMethod);
+                    FastMethodInvoker.setCacheMethod(fastMethodKey, fastMethod);
                 }
                 try {
                     fastMethod.invoke(any, new Object[] { value });
@@ -104,19 +105,20 @@ public final class FastMethodInvoker {
         }
     }
 
-    public static void setMap(Object any, LinkedHashMap<String, Object> map) {
+    public static void setMapValues(Object any, Map<String, ?> map) {
         for (var name : map.keySet()) {
             for (Field field : FastMethodInvoker.reflectionStorage(any.getClass())) {
                 if (field.getName().equals(name)) {
                     String methodName = "set" + StringUtils.capitalize(name);
                     String fastMethodKey = any.getClass().getName() + "." + methodName;
-                    FastMethod fastMethod = FastMethodInvoker.getFastMethod(fastMethodKey);
+                    FastMethod fastMethod = FastMethodInvoker.getCacheMethod(fastMethodKey);
                     if (fastMethod == null) {
                         fastMethod = FastClass.create(any.getClass()).getMethod(methodName, new Class[] { field.getType() });
-                        FastMethodInvoker.setFastMethod(fastMethodKey, fastMethod);
+                        FastMethodInvoker.setCacheMethod(fastMethodKey, fastMethod);
                     }
                     try {
-                        fastMethod.invoke(any, new Object[] { map.get(name) });
+                        String value = (String) ConvertUtils.convert(map.get(name), String.class);
+                        fastMethod.invoke(any, new Object[] { stringToObject(value) });
                     } catch (InvocationTargetException e) {
                         throw new RuntimeException(e.getCause());
                     }
@@ -131,7 +133,7 @@ public final class FastMethodInvoker {
                 for (String prefix : Arrays.asList("get", "is")) {
                     String methodName = prefix + StringUtils.capitalize(name);
                     String fastMethodKey = any.getClass().getName() + "." + methodName;
-                    FastMethod fastMethod = FastMethodInvoker.getFastMethod(fastMethodKey);
+                    FastMethod fastMethod = FastMethodInvoker.getCacheMethod(fastMethodKey);
                     if (fastMethod == null) {
                         try {
                             fastMethod = FastClass.create(any.getClass()).getMethod(methodName, null);
@@ -141,7 +143,7 @@ public final class FastMethodInvoker {
                     }
                     Object result = null;
                     if (fastMethod != null) {
-                        FastMethodInvoker.setFastMethod(fastMethodKey, fastMethod);
+                        FastMethodInvoker.setCacheMethod(fastMethodKey, fastMethod);
                         try {
                             result = fastMethod.invoke(any, null);
                         } catch (InvocationTargetException e) {
@@ -155,7 +157,7 @@ public final class FastMethodInvoker {
         return null;
     }
 
-    public static Object convertObject(final String object) {
+    public static Object stringToObject(final String object) {
         if (object.matches(NUMBER_REGEX)) return Long.parseLong(object);
         if (object.matches(DOUBLE_REGEX)) return Double.parseDouble(object);
         if (Arrays.asList(Boolean.TRUE.toString(), Boolean.FALSE.toString()).contains(object.toLowerCase()))

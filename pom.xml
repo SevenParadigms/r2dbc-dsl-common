@@ -5,7 +5,7 @@
 
 	<groupId>io.github.sevenparadigms</groupId>
 	<artifactId>spring-data-r2dbc-dsl-common</artifactId>
-	<version>3.7.3</version>
+	<version>3.7.4</version>
 
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -168,6 +168,12 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.32</version>
 			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.4</version>
 		</dependency>
 	</dependencies>
 

@@ -135,7 +135,7 @@ public abstract class JsonUtils {
             try {
                 var constructor = cls.getConstructor();
                 var obj = constructor.newInstance();
-                FastMethodInvoker.setMap(obj, (LinkedHashMap<String, Object>) map);
+                FastMethodInvoker.setMapValues(obj, (Map<String, Object>) map);
                 list.add(obj);
             } catch (Exception e) {
                 throw new RuntimeException(e);
