@@ -1,6 +1,5 @@
 package org.springframework.data.r2dbc.support;
 
-import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.cglib.reflect.FastClass;
 import org.springframework.cglib.reflect.FastMethod;
 import org.springframework.util.ConcurrentReferenceHashMap;
@@ -117,8 +116,11 @@ public final class FastMethodInvoker {
                         FastMethodInvoker.setCacheMethod(fastMethodKey, fastMethod);
                     }
                     try {
-                        String value = (String) ConvertUtils.convert(map.get(name), String.class);
-                        fastMethod.invoke(any, new Object[] { stringToObject(value) });
+                        Object value = null;
+                        if (map.get(name) instanceof String) {
+                            value = stringToObject((String) value);
+                        }
+                        fastMethod.invoke(any, new Object[] { value });
                     } catch (InvocationTargetException e) {
                         throw new RuntimeException(e.getCause());
                     }
