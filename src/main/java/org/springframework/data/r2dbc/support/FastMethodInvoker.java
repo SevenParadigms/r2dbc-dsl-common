@@ -118,7 +118,7 @@ public final class FastMethodInvoker {
                     try {
                         Object value = null;
                         if (map.get(name) instanceof String) {
-                            value = stringToObject((String) value);
+                            value = stringToObject((String) map.get(name));
                         }
                         fastMethod.invoke(any, new Object[] { value });
                     } catch (InvocationTargetException e) {
