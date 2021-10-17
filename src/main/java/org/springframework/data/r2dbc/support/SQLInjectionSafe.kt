@@ -28,4 +28,10 @@ object SQLInjectionSafe {
         }
         return true
     }
+
+    @JvmStatic
+    fun check(query: String): String {
+        throwElse(query)
+        return query
+    }
 }
