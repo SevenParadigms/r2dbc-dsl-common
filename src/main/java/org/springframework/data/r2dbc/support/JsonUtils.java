@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -76,21 +77,22 @@ public abstract class JsonUtils {
                     array.add(nodeToObject(node));
                 }
                 return array;
-            case BOOLEAN:
-                return json.booleanValue();
             case BINARY:
                 try {
                     return json.binaryValue();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+            case BOOLEAN:
+                return json.booleanValue();
             case NULL:
                 return null;
             case NUMBER:
                 return json.numberValue();
-            case POJO:
             case OBJECT:
+            case POJO:
                 return jsonToMap(json);
+            case STRING:
             default:
                 return json.textValue();
         }
@@ -146,5 +148,9 @@ public abstract class JsonUtils {
 
     public static ObjectNode objectNode() {
         return getMapper().createObjectNode();
+    }
+
+    public static ArrayNode arrayNode() {
+        return getMapper().createArrayNode();
     }
 }
