@@ -11,3 +11,7 @@ fun ByteArray.decode(): ByteArray = Base64.getMimeDecoder().decode(this)
 fun String.loadResource(): ByteArray = Files.readAllBytes(ResourceUtils.getFile("classpath:$this").toPath())
 
 fun ByteArray.convertString(): String = String(this, Charsets.UTF_8)
+
+fun ByteArray.hex() = this.joinToString(separator = "") { String.format("%02X", (it.toInt() and 0xFF)) }
+
+fun String.hexToByteArray() = ByteArray(this.length / 2) { this.substring(it * 2, it * 2 + 2).toInt(16).toByte() }

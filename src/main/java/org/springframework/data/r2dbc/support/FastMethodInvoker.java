@@ -126,7 +126,8 @@ public final class FastMethodInvoker {
                         Object value = null;
                         if (!field.getType().equals(String.class) && map.get(name) instanceof String) {
                             value = stringToObject((String) map.get(name), field.getType());
-                        }
+                        } else
+                            value = map.get(name);
                         fastMethod.invoke(any, new Object[]{value});
                     } catch (InvocationTargetException e) {
                         throw new RuntimeException(e);

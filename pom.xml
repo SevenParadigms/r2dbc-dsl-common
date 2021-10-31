@@ -5,7 +5,7 @@
 
 	<groupId>io.github.sevenparadigms</groupId>
 	<artifactId>spring-data-r2dbc-dsl-common</artifactId>
-	<version>3.8.1</version>
+	<version>4.0.0</version>
 
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -62,8 +62,8 @@
 	</scm>
 
 	<properties>
-		<spring.core>5.3.10</spring.core>
-		<spring.boot>2.5.5</spring.boot>
+		<spring.core>5.3.12</spring.core>
+		<spring.boot>2.5.6</spring.boot>
 		<kotlin.version>1.5.31</kotlin.version>
 		<kotlinx.version>1.5.2-native-mt</kotlinx.version>
 		<java.version>11</java.version>
@@ -174,6 +174,13 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.4</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.15</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
