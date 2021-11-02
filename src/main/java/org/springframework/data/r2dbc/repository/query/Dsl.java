@@ -26,7 +26,6 @@ public class Dsl implements Serializable {
     public static final String tsvProperty = "tsv";
     public static final String COMMA = ",";
     public static final String COLON = ":";
-    public static final String DOT = ".";
 
     public static final String in = "##";
     public static final String notIn = "!#";
@@ -199,15 +198,15 @@ public class Dsl implements Serializable {
     }
 
     public Dsl equals(String field, String value)  {
-        return equals(field, value);
+        return equals(field, (Object) value);
     }
 
     public Dsl equals(String field, UUID value)  {
-        return equals(field, value);
+        return equals(field, (Object) value);
     }
 
     public Dsl equals(String field, Number value)  {
-        return equals(field, value);
+        return equals(field, ConvertUtils.convert(value, String.class));
     }
 
     public Dsl equals(String field, Object value) {
@@ -232,15 +231,15 @@ public class Dsl implements Serializable {
     }
 
     public Dsl notEquals(String field, String value)  {
-        return notEquals(field, value);
+        return notEquals(field, (Object) value);
     }
 
     public Dsl notEquals(String field, UUID value)  {
-        return notEquals(field, value);
+        return notEquals(field, (Object) value);
     }
 
     public Dsl notEquals(String field, Number value)  {
-        return notEquals(field, value);
+        return notEquals(field, ConvertUtils.convert(value, String.class));
     }
 
     public Dsl notEquals(String field, Object value) {
