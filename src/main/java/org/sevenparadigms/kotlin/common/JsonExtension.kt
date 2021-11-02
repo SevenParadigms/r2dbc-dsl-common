@@ -13,16 +13,8 @@ fun <T> JsonNode.parseJson(cls: Class<T>): T = JsonUtils.jsonToObject(this, cls)
 
 fun <T> JsonNode.parseArray(cls: Class<T>): List<T> = JsonUtils.jsonToObjectList(this, cls)
 
-fun String?.toArrayNode(): ArrayNode = if (this == null)
-    JsonUtils.arrayNode()
-else
-    JsonUtils.getMapper().readTree(this) as ArrayNode
+fun String.toArrayNode(): ArrayNode = JsonUtils.getMapper().readTree(this) as ArrayNode
 
-fun <T> ArrayNode.contains(value: T): Boolean {
-    for (node in this)
-        if (node.asText().equals(ConvertUtils.convert(value, String::class.java).toString()))
-            return true
-    return false
-}
+fun <T> ArrayNode.contains(value: T): Boolean = this.any { it.asText().equals(ConvertUtils.convert(value, String::class.java).toString()) }
 
 fun JsonNode.singleQuotes(): String = this.toString().replace("\"", "'")

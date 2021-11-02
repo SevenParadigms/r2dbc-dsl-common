@@ -132,15 +132,17 @@ public abstract class JsonUtils {
 
     public static <T> ArrayList<T> jsonToObjectList(final JsonNode json, final Class<T> cls) {
         var list = new ArrayList<T>();
-        var maps = JsonUtils.jsonToObject(json, ArrayList.class);
-        for (Object map : maps) {
-            try {
-                var constructor = cls.getConstructor();
-                var obj = constructor.newInstance();
-                FastMethodInvoker.setMapValues(obj, (Map<String, Object>) map);
-                list.add(obj);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        if (!json.isEmpty()) {
+            var maps = JsonUtils.jsonToObject(json, ArrayList.class);
+            for (Object map : maps) {
+                try {
+                    var constructor = cls.getConstructor();
+                    var obj = constructor.newInstance();
+                    FastMethodInvoker.setMapValues(obj, (Map<String, Object>) map);
+                    list.add(obj);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         return list;

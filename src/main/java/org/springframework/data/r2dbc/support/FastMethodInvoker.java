@@ -116,7 +116,7 @@ public final class FastMethodInvoker {
             for (Field field : FastMethodInvoker.reflectionStorage(any.getClass())) {
                 if (field.getName().equals(name)) {
                     String methodName = SET + StringUtils.capitalize(name);
-                    String fastMethodKey = any.getClass().getName() + "." + methodName;
+                    String fastMethodKey = any.getClass().getName() + DOT + methodName;
                     FastMethod fastMethod = FastMethodInvoker.getCacheMethod(fastMethodKey);
                     if (fastMethod == null) {
                         fastMethod = FastClass.create(any.getClass()).getMethod(methodName, new Class[]{field.getType()});
@@ -148,7 +148,7 @@ public final class FastMethodInvoker {
         if (field.getName().equals(name) && !isStatic(field.getModifiers())) {
             for (String prefix : Arrays.asList(GET, IS)) {
                 String methodName = prefix + StringUtils.capitalize(name);
-                String fastMethodKey = any.getClass().getName() + "." + methodName;
+                String fastMethodKey = any.getClass().getName() + DOT + methodName;
                 FastMethod fastMethod = FastMethodInvoker.getCacheMethod(fastMethodKey);
                 if (fastMethod == null) {
                     try {
@@ -184,8 +184,8 @@ public final class FastMethodInvoker {
                 if (fastMethod == null) {
                     fastMethod = FastClass.create(cls).getMethod("parse", new Class[]{CharSequence.class});
                     FastMethodInvoker.setCacheMethod(fastMethodKey, fastMethod);
-                    return fastMethod.invoke(null, new Object[]{object});
                 }
+                return fastMethod.invoke(null, new Object[]{object});
             }
         } catch (Exception e) {
             e.printStackTrace();
