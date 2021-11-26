@@ -120,6 +120,14 @@ public class Dsl implements Serializable {
         return this;
     }
 
+    public Dsl order(String field, Enum ascDesc) {
+        if (!sort.isEmpty()) {
+            sort += COMMA;
+        }
+        sort += (field + COLON + ascDesc.name());
+        return this;
+    }
+
     public Dsl fields(List<String> fields) {
         if (fields != null) {
             this.fields = fields.toArray(new String[0]);
