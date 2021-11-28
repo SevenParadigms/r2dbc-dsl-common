@@ -2,6 +2,7 @@ package org.springframework.data.r2dbc.repository.query;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.data.r2dbc.support.SQLInjectionSafe;
+import org.springframework.data.r2dbc.support.SqlField;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -22,8 +23,6 @@ import static org.apache.commons.lang3.StringUtils.SPACE;
  * @author Lao Tsing
  */
 public class Dsl implements Serializable {
-    public static final String idProperty = "id";
-    public static final String tsvProperty = "tsv";
     public static final String COMMA = ",";
     public static final String COLON = ":";
 
@@ -194,15 +193,15 @@ public class Dsl implements Serializable {
     }
 
     public Dsl id(String id) {
-        return equals(idProperty, id);
+        return equals(SqlField.id, id);
     }
 
     public Dsl id(UUID id) {
-        return equals(idProperty, id);
+        return equals(SqlField.id, id);
     }
 
     public Dsl id(Number id) {
-        return equals(idProperty, id);
+        return equals(SqlField.id, id);
     }
 
     public Dsl equals(String field, String value)  {
@@ -307,7 +306,7 @@ public class Dsl implements Serializable {
     }
 
     public Dsl fts(String filter) {
-        return fts(tsvProperty, filter);
+        return fts(SqlField.tsv, filter);
     }
 
     public Dsl fts(String field, String filter) {
