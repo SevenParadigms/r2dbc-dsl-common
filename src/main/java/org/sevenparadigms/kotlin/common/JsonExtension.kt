@@ -2,6 +2,7 @@ package org.sevenparadigms.kotlin.common
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.commons.beanutils.ConvertUtils
 import org.springframework.data.r2dbc.support.JsonUtils
 
@@ -18,3 +19,11 @@ fun String.toArrayNode(): ArrayNode = JsonUtils.getMapper().readTree(this) as Ar
 fun <T> ArrayNode.contains(value: T): Boolean = this.any { it.asText().equals(ConvertUtils.convert(value, String::class.java).toString()) }
 
 fun JsonNode.singleQuotes(): String = this.toString().replace("\"", "'")
+
+fun JsonNode.put(key: String, value: String): JsonNode = (this as ObjectNode).put(key, value)
+
+fun JsonNode.put(key: String, value: Int): JsonNode = (this as ObjectNode).put(key, value)
+
+fun JsonNode.put(key: String, value: Boolean): JsonNode = (this as ObjectNode).put(key, value)
+
+fun JsonNode.put(key: String, value: Long): JsonNode = (this as ObjectNode).put(key, value)
