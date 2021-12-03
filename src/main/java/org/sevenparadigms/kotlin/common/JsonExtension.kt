@@ -45,3 +45,5 @@ fun JsonNode.remove(key: Enum<*>): JsonNode = (this as ObjectNode).remove(key.na
 fun JsonNode.remove(key: String): JsonNode = (this as ObjectNode).remove(key)
 
 fun JsonNode.has(key: Enum<*>): Boolean = has(key.name)
+
+fun JsonNode.jsonToMap(): Map<String, *> = JsonUtils.jsonToMap(this)

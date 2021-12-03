@@ -11,3 +11,7 @@ fun Collection<Any>.convertMap(keyName: String, valueName: String): Map<String, 
 fun Any.setValue(name: String, value: Any) = FastMethodInvoker.setValue(this, name, value)
 
 fun Any.getValue(name: String): Any? = FastMethodInvoker.getValue(this, name)
+
+fun Any.setValue(name: Enum<*>, value: Any) = FastMethodInvoker.setValue(this, name.name, value)
+
+fun Any.getValue(name: Enum<*>): Any? = FastMethodInvoker.getValue(this, name.name)
