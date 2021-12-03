@@ -35,3 +35,13 @@ fun JsonNode.put(key: Enum<*>, value: Int): JsonNode = (this as ObjectNode).put(
 fun JsonNode.put(key: Enum<*>, value: Boolean): JsonNode = (this as ObjectNode).put(key.name, value)
 
 fun JsonNode.put(key: Enum<*>, value: Long): JsonNode = (this as ObjectNode).put(key.name, value)
+
+fun JsonNode.get(key: Enum<*>): JsonNode = (this as ObjectNode).get(key.name)
+
+fun JsonNode.get(key: String): JsonNode = (this as ObjectNode).get(key)
+
+fun JsonNode.remove(key: Enum<*>): JsonNode = (this as ObjectNode).remove(key.name)
+
+fun JsonNode.remove(key: String): JsonNode = (this as ObjectNode).remove(key)
+
+fun JsonNode.has(key: Enum<*>): Boolean = has(key.name)
