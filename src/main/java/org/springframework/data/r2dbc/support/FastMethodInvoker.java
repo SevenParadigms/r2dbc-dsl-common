@@ -53,11 +53,11 @@ public final class FastMethodInvoker {
         methodStorage.put(classKey, fastMethod);
     }
 
-    public static Boolean isField(Object any, String name) {
-        return isField(any.getClass(), name);
+    public static Boolean has(Object any, String name) {
+        return has(any.getClass(), name);
     }
 
-    public static Boolean isField(Class<?> cls, String name) {
+    public static Boolean has(Class<?> cls, String name) {
         for (Field field : FastMethodInvoker.reflectionStorage(cls)) {
             if (field.getName().equals(name)) return true;
         }
@@ -73,20 +73,20 @@ public final class FastMethodInvoker {
 
     public static Object copyTo(Object source, Object target) {
         for (Field sourceField : FastMethodInvoker.reflectionStorage(source.getClass())) {
-            if (isField(target, sourceField.getName())) {
+            if (has(target, sourceField.getName())) {
                 setValue(target, sourceField.getName(), getValue(source, sourceField.getName()));
             }
         }
         return target;
     }
 
-    public static Map<String, ?> convertMap(Object any) {
+    public static Map<String, ?> objectToMap(Object any) {
         return FastMethodInvoker.reflectionStorage(any.getClass()).stream()
                 .filter(field -> !isStatic(field.getModifiers()))
                 .collect(Collectors.toMap(Field::getName, (field) -> getValue(any, field.getName())));
     }
 
-    public static Map<String, ?> convertMap(Collection<?> collection, String keyName, String valueName) {
+    public static Map<String, ?> objectsToMap(Collection<?> collection, String keyName, String valueName) {
         return collection.stream().collect(
                 Collectors.toMap((entry) -> (String) getValue(entry, keyName), (entry) -> getValue(entry, valueName)));
     }

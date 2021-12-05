@@ -119,7 +119,7 @@ public class Dsl implements Serializable {
         return this;
     }
 
-    public Dsl order(String field, Enum ascDesc) {
+    public Dsl order(String field, Enum<?> ascDesc) {
         if (!sort.isEmpty()) {
             sort += COMMA;
         }
@@ -155,6 +155,10 @@ public class Dsl implements Serializable {
         return this;
     }
 
+    public Dsl in(String field, List<UUID> ids) {
+        return in(field, ids.toArray(new UUID[0]));
+    }
+
     public Dsl in(String field, Number... ids) {
         if (field != null && ids.length > 0) {
             query = start(query) + field + in + Stream.of(ids).map(it ->
@@ -175,6 +179,10 @@ public class Dsl implements Serializable {
             query = start(query) + field + notIn + Stream.of(ids).map(Object::toString).collect(Collectors.joining(SPACE));
         }
         return this;
+    }
+
+    public Dsl notIn(String field, List<UUID> ids) {
+        return notIn(field, ids.toArray(new UUID[0]));
     }
 
     public Dsl notIn(String field, Number... ids) {

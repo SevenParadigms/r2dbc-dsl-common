@@ -1,11 +1,12 @@
 package org.sevenparadigms.kotlin.common
 
 import org.springframework.data.r2dbc.support.FastMethodInvoker
+import java.lang.reflect.Field
 
-fun Any.convertMap(): Map<String, Any?> =
+fun Any.objectToMap(): Map<String, Any?> =
     FastMethodInvoker.reflectionStorage(this.javaClass).associate { it.name to FastMethodInvoker.getValue(this, it.name) }
 
-fun Collection<Any>.convertMap(keyName: String, valueName: String): Map<String, Any?> =
+fun Collection<Any>.objectsToMap(keyName: String, valueName: String): Map<String, Any?> =
     this.associate { it.getValue(keyName) as String to it.getValue(valueName) as Any }
 
 fun Any.setValue(name: String, value: Any) = FastMethodInvoker.setValue(this, name, value)
@@ -15,3 +16,19 @@ fun Any.getValue(name: String): Any? = FastMethodInvoker.getValue(this, name)
 fun Any.setValue(name: Enum<*>, value: Any) = FastMethodInvoker.setValue(this, name.name, value)
 
 fun Any.getValue(name: Enum<*>): Any? = FastMethodInvoker.getValue(this, name.name)
+
+fun <T> String.stringToObject(cls: Class<T>): Any = FastMethodInvoker.stringToObject(this, cls)
+
+fun Class<*>.getFieldByAnnotation(cls: Class<*>): Field = FastMethodInvoker.getFieldByAnnotation(this, cls)
+
+fun Any.setMapValues(map: Map<String, Any>) = FastMethodInvoker.setMapValues(this, map)
+
+fun <T> Any.copyTo(target: T): Any = FastMethodInvoker.copyTo(this, target)
+
+fun Any.has(name: String): Boolean = FastMethodInvoker.has(this, name)
+
+fun Any.has(name: Enum<*>): Boolean = FastMethodInvoker.has(this, name.name)
+
+fun Class<*>.has(name: String): Boolean = FastMethodInvoker.has(this, name)
+
+fun Class<*>.has(name: Enum<*>): Boolean = FastMethodInvoker.has(this, name.name)

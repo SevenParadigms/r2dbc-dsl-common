@@ -6,17 +6,17 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.commons.beanutils.ConvertUtils
 import org.springframework.data.r2dbc.support.JsonUtils
 
-fun Any.toJsonNode(): JsonNode = JsonUtils.objectToJson(this)
+fun Any.objectToJson(): JsonNode = JsonUtils.objectToJson(this)
 
 fun <T> String.parseJson(cls: Class<T>): T = JsonUtils.stringToObject(this, cls)
 
-fun <T> JsonNode.parseJson(cls: Class<T>): T = JsonUtils.jsonToObject(this, cls)
+fun <T> JsonNode.jsonToObject(cls: Class<T>): T = JsonUtils.jsonToObject(this, cls)
 
-fun <T> JsonNode.parseArray(cls: Class<T>): List<T> = JsonUtils.jsonToObjectList(this, cls)
+fun <T> JsonNode.jsonToObjectList(cls: Class<T>): List<T> = JsonUtils.jsonToObjectList(this, cls)
 
 fun String.toArrayNode(): ArrayNode = JsonUtils.getMapper().readTree(this) as ArrayNode
 
-fun <T> ArrayNode.contains(value: T): Boolean = this.any { it.asText().equals(ConvertUtils.convert(value, String::class.java).toString()) }
+fun <T> ArrayNode.has(value: T): Boolean = this.any { it.asText().equals(ConvertUtils.convert(value, String::class.java).toString()) }
 
 fun JsonNode.singleQuotes(): String = this.toString().replace("\"", "'")
 
@@ -47,3 +47,5 @@ fun JsonNode.remove(key: String): JsonNode = (this as ObjectNode).remove(key)
 fun JsonNode.has(key: Enum<*>): Boolean = has(key.name)
 
 fun JsonNode.jsonToMap(): Map<String, *> = JsonUtils.jsonToMap(this)
+
+fun Map<String, *>.mapToJson(): JsonNode = JsonUtils.mapToJson(this)
