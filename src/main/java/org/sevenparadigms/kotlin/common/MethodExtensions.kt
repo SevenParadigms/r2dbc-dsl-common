@@ -2,6 +2,7 @@ package org.sevenparadigms.kotlin.common
 
 import org.springframework.data.r2dbc.support.FastMethodInvoker
 import java.lang.reflect.Field
+import java.util.*
 
 fun Any.objectToMap(): Map<String, Any?> =
     FastMethodInvoker.reflectionStorage(this.javaClass).associate { it.name to FastMethodInvoker.getValue(this, it.name) }
@@ -19,7 +20,9 @@ fun Any.getValue(name: Enum<*>): Any? = FastMethodInvoker.getValue(this, name.na
 
 fun <T> String.stringToObject(cls: Class<T>): Any = FastMethodInvoker.stringToObject(this, cls)
 
-fun Class<*>.getFieldByAnnotation(cls: Class<*>): Field = FastMethodInvoker.getFieldByAnnotation(this, cls)
+fun Class<*>.getFieldByAnnotation(cls: Class<*>): Optional<Field> = FastMethodInvoker.getFieldByAnnotation(this, cls)
+
+fun Class<*>.getFieldsByAnnotation(cls: Class<*>): List<Field> = FastMethodInvoker.getFieldsByAnnotation(this, cls)
 
 fun Any.setMapValues(map: Map<String, Any>) = FastMethodInvoker.setMapValues(this, map)
 

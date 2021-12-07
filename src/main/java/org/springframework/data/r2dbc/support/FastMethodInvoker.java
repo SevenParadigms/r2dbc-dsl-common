@@ -195,22 +195,26 @@ public final class FastMethodInvoker {
         return null;
     }
 
-    public static Field getFieldByAnnotation(final Class<?> cls, final Class<?> ann) {
+    public static Optional<Field> getFieldByAnnotation(final Class<?> cls, final Class<?> ann) {
+        return getFieldsByAnnotation(cls, ann).stream().findFirst();
+    }
+
+    public static List<Field> getFieldsByAnnotation(final Class<?> cls, final Class<?> ann) {
         Class<?> c = cls;
+        var result = new ArrayList<Field>();
         while (c != null) {
             for (Field field : FastMethodInvoker.reflectionStorage(cls)) {
                 var key = cls.getName().concat(".").concat(field.getName());
                 if (annotationStorage.containsKey(key)) {
                     if (annotationStorage.get(key)) {
-                        return field;
-                    } else
-                        return null;
+                        result.add(field);
+                    }
                 } else {
                     Annotation[] annotations = field.getDeclaredAnnotations();
                     for (Annotation annotation : annotations) {
                         if (annotation.annotationType() == ann) {
                             annotationStorage.put(key, true);
-                            return field;
+                            result.add(field);
                         } else
                             annotationStorage.put(key, false);
                     }
@@ -218,6 +222,6 @@ public final class FastMethodInvoker {
             }
             c = c.getSuperclass();
         }
-        return null;
+        return result;
     }
 }
