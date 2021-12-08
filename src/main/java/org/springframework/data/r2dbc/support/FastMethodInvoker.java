@@ -9,6 +9,8 @@ import org.springframework.util.StringUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
@@ -167,29 +169,32 @@ public final class FastMethodInvoker {
 
     public static Object stringToObject(final String object, final Class<?> cls) {
         if (object != null) {
-            try {
-                if (cls.equals(String.class)) {
-                    return object;
-                }
-                if (cls.equals(UUID.class)) {
+            if (cls.equals(String.class)) return object;
+            if (object.matches(NUMBER_REGEX) || object.matches(DOUBLE_REGEX) || object.matches(BOOLEAN_REGEX)) {
+                return ConvertUtils.convert(object, cls);
+            }
+            switch (cls.getSimpleName()) {
+                case "UUID":
                     if (object.matches(UUID_REGEX))
                         return UUID.fromString(object);
                     else
                         return null;
-                }
-                if (object.matches(NUMBER_REGEX) || object.matches(DOUBLE_REGEX) || object.matches(BOOLEAN_REGEX))
-                    return ConvertUtils.convert(object, cls);
-                else {
-                    String fastMethodKey = cls.getName() + ".parse";
-                    FastMethod fastMethod = FastMethodInvoker.getCacheMethod(fastMethodKey);
-                    if (fastMethod == null) {
-                        fastMethod = FastClass.create(cls).getMethod("parse", new Class[]{CharSequence.class});
-                        FastMethodInvoker.setCacheMethod(fastMethodKey, fastMethod);
+                case "BigInteger":
+                    return BigInteger.valueOf(Long.parseLong(object));
+                case "byte[]":
+                    return object.getBytes(StandardCharsets.UTF_8);
+                default:
+                    try {
+                        String fastMethodKey = cls.getName() + ".parse";
+                        FastMethod fastMethod = FastMethodInvoker.getCacheMethod(fastMethodKey);
+                        if (fastMethod == null) {
+                            fastMethod = FastClass.create(cls).getMethod("parse", new Class[]{CharSequence.class});
+                            FastMethodInvoker.setCacheMethod(fastMethodKey, fastMethod);
+                        }
+                        return fastMethod.invoke(null, new Object[]{object});
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    return fastMethod.invoke(null, new Object[]{object});
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         return null;
@@ -203,8 +208,8 @@ public final class FastMethodInvoker {
         Class<?> c = cls;
         var result = new ArrayList<Field>();
         while (c != null) {
-            for (Field field : FastMethodInvoker.reflectionStorage(cls)) {
-                var key = cls.getName().concat(".").concat(field.getName());
+            for (Field field : FastMethodInvoker.reflectionStorage(c)) {
+                var key = ann.getSimpleName().concat(c.getSimpleName()).concat(field.getName());
                 if (annotationStorage.containsKey(key)) {
                     if (annotationStorage.get(key)) {
                         result.add(field);
