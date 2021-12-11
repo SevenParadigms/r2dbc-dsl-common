@@ -28,6 +28,7 @@ import java.util.Map;
  */
 public abstract class JsonUtils {
     private static final ObjectMapper OBJECT_MAPPER;
+
     static {
         var javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(ZonedDateTime.class, new ZonedDateTimeSerializer(DateTimeFormatter.ISO_ZONED_DATE_TIME));
@@ -64,6 +65,16 @@ public abstract class JsonUtils {
             map.put(fieldName, nodeToObject(jsonNode));
         }
         return map;
+    }
+
+    public static JsonNode copy(final JsonNode source, final JsonNode target) {
+        var fieldNames = source.fieldNames();
+        while (fieldNames.hasNext()) {
+            var fieldName = fieldNames.next();
+            var jsonNode = source.get(fieldName);
+            ((ObjectNode) target).replace(fieldName, jsonNode);
+        }
+        return target;
     }
 
     public static Object nodeToObject(final JsonNode json) {
