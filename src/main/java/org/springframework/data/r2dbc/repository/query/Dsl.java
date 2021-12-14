@@ -1,5 +1,6 @@
 package org.springframework.data.r2dbc.repository.query;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.data.r2dbc.support.SQLInjectionSafe;
 import org.springframework.data.r2dbc.support.SqlField;
@@ -32,7 +33,7 @@ public class Dsl implements Serializable {
     public static final String equal = "==";
     public static final String notEqual = "!=";
     public static final String greater = ">>";
-    public static final String greaterEqual = ">=-";
+    public static final String greaterEqual = ">=";
     public static final String less = "<<";
     public static final String lessEqual = "<=";
     public static final String isNull = "@";
@@ -92,6 +93,7 @@ public class Dsl implements Serializable {
         return sort;
     }
 
+    @JsonIgnore
     public boolean isPaged() {
         return page != -1 && size != -1;
     }
@@ -107,6 +109,7 @@ public class Dsl implements Serializable {
         return this;
     }
 
+    @JsonIgnore
     public boolean isSorted() {
         return !sort.isEmpty() && sort.contains(COLON);
     }
@@ -324,6 +327,7 @@ public class Dsl implements Serializable {
         return this;
     }
 
+    @JsonIgnore
     public List<String> getResultFields() {
         if (fields.length > 0) {
             return List.of(fields);
