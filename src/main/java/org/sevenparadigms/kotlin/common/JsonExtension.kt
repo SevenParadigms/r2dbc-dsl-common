@@ -49,3 +49,5 @@ fun JsonNode.has(key: Enum<*>): Boolean = has(key.name)
 fun JsonNode.jsonToMap(): Map<String, *> = JsonUtils.jsonToMap(this)
 
 fun Map<String, *>.mapToJson(): JsonNode = JsonUtils.mapToJson(this)
+
+fun JsonNode.copy(source: JsonNode, target: JsonNode) = JsonUtils.copy(source, target)
