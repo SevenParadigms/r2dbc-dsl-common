@@ -27,8 +27,8 @@ public class Dsl implements Serializable {
     public static final String COMMA = ",";
     public static final String COLON = ":";
 
-    public static final String in = "##";
-    public static final String notIn = "!#";
+    public static final String in = "^^";
+    public static final String notIn = "!^";
     public static final String not = "!";
     public static final String equal = "==";
     public static final String notEqual = "!=";
