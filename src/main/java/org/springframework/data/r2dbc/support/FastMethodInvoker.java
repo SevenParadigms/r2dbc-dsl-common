@@ -66,8 +66,8 @@ public final class FastMethodInvoker {
         return false;
     }
 
-    public static Field getField(Object any, String name) {
-        for (Field field : FastMethodInvoker.reflectionStorage(any.getClass())) {
+    public static Field getField(Class<?> cls, String name) {
+        for (Field field : FastMethodInvoker.reflectionStorage(cls)) {
             if (field.getName().equals(name)) return field;
         }
         return null;
@@ -226,6 +226,18 @@ public final class FastMethodInvoker {
                 }
             }
             c = c.getSuperclass();
+        }
+        return result;
+    }
+
+    public static Set<Field> getFields(Class<?> cls, String fiendName, Class<?>...annotations) {
+        var result = new HashSet<Field>();
+        if (has(cls, fiendName)) {
+            result.add(getField(cls, fiendName));
+        }
+        for(Class<?> ann : annotations) {
+            var fields = getFieldsByAnnotation(cls, ann);
+            result.addAll(fields);
         }
         return result;
     }
