@@ -2,6 +2,7 @@ package org.springframework.data.r2dbc.repository.query;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.r2dbc.support.SQLInjectionSafe;
 import org.springframework.data.r2dbc.support.SqlField;
 
@@ -45,13 +46,17 @@ public class Dsl implements Serializable {
         return new Dsl(null, null, null, null, null, null);
     }
 
+    public static Dsl create(String query) {
+        return new Dsl(query, null, null, null, null, null);
+    }
+
     public Dsl(final String query, final Integer page, final Integer size, final String sort, final String lang, final String fields) {
         this.query = query != null ? query : EMPTY;
         this.page = page != null ? page : -1;
         this.size = size != null ? size : -1;
-        this.sort = sort != null ? sort : EMPTY;
-        this.lang = lang != null ? lang : EMPTY;
-        this.fields = fields != null ? fields.split(COMMA) : new String[0];
+        this.sort = !ObjectUtils.isEmpty(sort) ? sort : EMPTY;
+        this.lang = !ObjectUtils.isEmpty(lang) ? lang : EMPTY;
+        this.fields = !ObjectUtils.isEmpty(fields) ? fields.split(COMMA) : new String[0];
     }
 
     private String query;
@@ -71,6 +76,10 @@ public class Dsl implements Serializable {
             }
         }
         return decodedQuery;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
     }
 
     public String getLang() {
