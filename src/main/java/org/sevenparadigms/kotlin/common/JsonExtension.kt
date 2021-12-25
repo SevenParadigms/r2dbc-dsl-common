@@ -38,8 +38,6 @@ fun JsonNode.put(key: Enum<*>, value: Long): JsonNode = (this as ObjectNode).put
 
 fun JsonNode.get(key: Enum<*>): JsonNode = (this as ObjectNode).get(key.name)
 
-fun JsonNode.get(key: String): JsonNode = (this as ObjectNode).get(key)
-
 fun JsonNode.remove(key: Enum<*>): JsonNode = (this as ObjectNode).remove(key.name)
 
 fun JsonNode.remove(key: String): JsonNode = (this as ObjectNode).remove(key)
