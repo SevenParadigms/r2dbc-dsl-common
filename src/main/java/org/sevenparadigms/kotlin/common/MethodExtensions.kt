@@ -26,7 +26,9 @@ fun Class<*>.getFieldsByAnnotation(cls: Class<*>): List<Field> = FastMethodInvok
 
 fun Any.setMapValues(map: Map<String, Any>) = FastMethodInvoker.setMapValues(this, map)
 
-fun <T> Any.copyTo(target: T): Any = FastMethodInvoker.copyTo(this, target)
+fun <T> Any.copyTo(target: T): Any = FastMethodInvoker.copy(this, target)
+
+fun <T> Any.copyNotNullTo(target: T): Any = FastMethodInvoker.copyNotNull(this, target)
 
 fun Any.has(name: String): Boolean = FastMethodInvoker.has(this, name)
 

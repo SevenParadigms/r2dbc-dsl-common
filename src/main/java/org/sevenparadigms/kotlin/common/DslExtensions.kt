@@ -46,3 +46,5 @@ fun Dsl.isNotNull(name: Enum<*>): Dsl = isNotNull(name.name)
 fun Dsl.like(name: Enum<*>, value: String): Dsl = like(name.name, value)
 
 fun Dsl.fts(name: Enum<*>, value: String): Dsl = fts(name.name, value)
+
+fun Dsl.generateId(): String = "$query$page$size$sort$fields".sha512()

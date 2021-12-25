@@ -50,4 +50,4 @@ fun JsonNode.jsonToMap(): Map<String, *> = JsonUtils.jsonToMap(this)
 
 fun Map<String, *>.mapToJson(): JsonNode = JsonUtils.mapToJson(this)
 
-fun JsonNode.copy(source: JsonNode, target: JsonNode) = JsonUtils.copy(source, target)
+fun JsonNode.copyTo(target: JsonNode): JsonNode = JsonUtils.copy(this, target)

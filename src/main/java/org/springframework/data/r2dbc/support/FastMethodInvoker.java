@@ -60,21 +60,21 @@ public final class FastMethodInvoker {
     }
 
     public static Boolean has(Class<?> cls, String name) {
-        for (Field field : FastMethodInvoker.reflectionStorage(cls)) {
+        for (Field field : reflectionStorage(cls)) {
             if (field.getName().equals(name)) return true;
         }
         return false;
     }
 
     public static Field getField(Class<?> cls, String name) {
-        for (Field field : FastMethodInvoker.reflectionStorage(cls)) {
+        for (Field field : reflectionStorage(cls)) {
             if (field.getName().equals(name)) return field;
         }
         return null;
     }
 
-    public static Object copyTo(Object source, Object target) {
-        for (Field sourceField : FastMethodInvoker.reflectionStorage(source.getClass())) {
+    public static Object copy(Object source, Object target) {
+        for (Field sourceField : reflectionStorage(source.getClass())) {
             if (has(target, sourceField.getName())) {
                 setValue(target, sourceField.getName(), getValue(source, sourceField.getName()));
             }
@@ -82,8 +82,18 @@ public final class FastMethodInvoker {
         return target;
     }
 
+    public static Object copyNotNull(Object source, Object target) {
+        for (Field sourceField : reflectionStorage(source.getClass())) {
+            var value = getValue(source, sourceField.getName());
+            if (has(target, sourceField.getName()) && value != null) {
+                setValue(target, sourceField.getName(), value);
+            }
+        }
+        return target;
+    }
+
     public static Map<String, ?> objectToMap(Object any) {
-        return FastMethodInvoker.reflectionStorage(any.getClass()).stream()
+        return reflectionStorage(any.getClass()).stream()
                 .filter(field -> !isStatic(field.getModifiers()))
                 .collect(Collectors.toMap(Field::getName, (field) -> getValue(any, field.getName())));
     }
@@ -94,14 +104,14 @@ public final class FastMethodInvoker {
     }
 
     public static void setValue(Object any, String name, Object value) {
-        for (Field field : FastMethodInvoker.reflectionStorage(any.getClass())) {
+        for (Field field : reflectionStorage(any.getClass())) {
             if (field.getName().equals(name)) {
                 String methodName = SET + StringUtils.capitalize(name);
                 String fastMethodKey = any.getClass().getName() + DOT + methodName;
-                FastMethod fastMethod = FastMethodInvoker.getCacheMethod(fastMethodKey);
+                FastMethod fastMethod = getCacheMethod(fastMethodKey);
                 if (fastMethod == null) {
                     fastMethod = FastClass.create(any.getClass()).getMethod(methodName, new Class[]{field.getType()});
-                    FastMethodInvoker.setCacheMethod(fastMethodKey, fastMethod);
+                    setCacheMethod(fastMethodKey, fastMethod);
                 }
                 try {
                     if (!field.getType().equals(String.class) && value instanceof String) {
@@ -117,14 +127,14 @@ public final class FastMethodInvoker {
 
     public static void setMapValues(Object any, Map<String, ?> map) {
         for (var name : map.keySet()) {
-            for (Field field : FastMethodInvoker.reflectionStorage(any.getClass())) {
+            for (Field field : reflectionStorage(any.getClass())) {
                 if (field.getName().equals(name)) {
                     String methodName = SET + StringUtils.capitalize(name);
                     String fastMethodKey = any.getClass().getName() + DOT + methodName;
-                    FastMethod fastMethod = FastMethodInvoker.getCacheMethod(fastMethodKey);
+                    FastMethod fastMethod = getCacheMethod(fastMethodKey);
                     if (fastMethod == null) {
                         fastMethod = FastClass.create(any.getClass()).getMethod(methodName, new Class[]{field.getType()});
-                        FastMethodInvoker.setCacheMethod(fastMethodKey, fastMethod);
+                        setCacheMethod(fastMethodKey, fastMethod);
                     }
                     try {
                         Object value;
@@ -142,12 +152,12 @@ public final class FastMethodInvoker {
     }
 
     public static Object getValue(Object any, String name) {
-        for (Field field : FastMethodInvoker.reflectionStorage(any.getClass())) {
+        for (Field field : reflectionStorage(any.getClass())) {
             if (field.getName().equals(name) && !isStatic(field.getModifiers())) {
                 for (String prefix : Arrays.asList(GET, IS)) {
                     String methodName = prefix + StringUtils.capitalize(field.getName());
                     String fastMethodKey = any.getClass().getName() + DOT + methodName;
-                    FastMethod fastMethod = FastMethodInvoker.getCacheMethod(fastMethodKey);
+                    FastMethod fastMethod = getCacheMethod(fastMethodKey);
                     if (fastMethod == null) {
                         try {
                             fastMethod = FastClass.create(any.getClass()).getMethod(methodName, null);
@@ -155,7 +165,7 @@ public final class FastMethodInvoker {
                             throw new RuntimeException(e);
                         }
                     }
-                    FastMethodInvoker.setCacheMethod(fastMethodKey, fastMethod);
+                    setCacheMethod(fastMethodKey, fastMethod);
                     try {
                         return fastMethod.invoke(any, null);
                     } catch (InvocationTargetException e) {
@@ -186,10 +196,10 @@ public final class FastMethodInvoker {
                 default:
                     try {
                         String fastMethodKey = cls.getName() + ".parse";
-                        FastMethod fastMethod = FastMethodInvoker.getCacheMethod(fastMethodKey);
+                        FastMethod fastMethod = getCacheMethod(fastMethodKey);
                         if (fastMethod == null) {
                             fastMethod = FastClass.create(cls).getMethod("parse", new Class[]{CharSequence.class});
-                            FastMethodInvoker.setCacheMethod(fastMethodKey, fastMethod);
+                            setCacheMethod(fastMethodKey, fastMethod);
                         }
                         return fastMethod.invoke(null, new Object[]{object});
                     } catch (Exception e) {
@@ -208,7 +218,7 @@ public final class FastMethodInvoker {
         Class<?> c = cls;
         var result = new ArrayList<Field>();
         while (c != null) {
-            for (Field field : FastMethodInvoker.reflectionStorage(c)) {
+            for (Field field : reflectionStorage(c)) {
                 var key = ann.getSimpleName().concat(c.getSimpleName()).concat(field.getName());
                 if (annotationStorage.containsKey(key)) {
                     if (annotationStorage.get(key)) {
