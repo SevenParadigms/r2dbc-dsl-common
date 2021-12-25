@@ -73,7 +73,7 @@ public final class FastMethodInvoker {
         return null;
     }
 
-    public static Object copy(Object source, Object target) {
+    public static <T> T copy(Object source, T target) {
         for (Field sourceField : reflectionStorage(source.getClass())) {
             if (has(target, sourceField.getName())) {
                 setValue(target, sourceField.getName(), getValue(source, sourceField.getName()));
@@ -82,7 +82,7 @@ public final class FastMethodInvoker {
         return target;
     }
 
-    public static Object copyNotNull(Object source, Object target) {
+    public static <T> T copyNotNull(Object source, T target) {
         for (Field sourceField : reflectionStorage(source.getClass())) {
             var value = getValue(source, sourceField.getName());
             if (has(target, sourceField.getName()) && value != null) {
