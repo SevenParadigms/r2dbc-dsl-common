@@ -84,9 +84,11 @@ public final class FastMethodInvoker {
 
     public static <T> T copyNotNull(Object source, T target) {
         for (Field sourceField : reflectionStorage(source.getClass())) {
-            var value = getValue(source, sourceField.getName());
-            if (has(target, sourceField.getName()) && value != null) {
-                setValue(target, sourceField.getName(), value);
+            if (has(target, sourceField.getName())) {
+                var value = getValue(source, sourceField.getName());
+                if (value != null) {
+                    setValue(target, sourceField.getName(), value);
+                }
             }
         }
         return target;
@@ -94,13 +96,14 @@ public final class FastMethodInvoker {
 
     public static Map<String, ?> objectToMap(Object any) {
         return reflectionStorage(any.getClass()).stream()
-                .filter(field -> !isStatic(field.getModifiers()))
+                .filter(field -> !isStatic(field.getModifiers()) && getValue(any, field.getName()) != null)
                 .collect(Collectors.toMap(Field::getName, (field) -> getValue(any, field.getName())));
     }
 
     public static Map<String, ?> objectsToMap(Collection<?> collection, String keyName, String valueName) {
-        return collection.stream().collect(
-                Collectors.toMap((entry) -> (String) getValue(entry, keyName), (entry) -> getValue(entry, valueName)));
+        return collection.stream()
+                .filter(entry -> getValue(entry, valueName) != null)
+                .collect(Collectors.toMap((entry) -> (String) getValue(entry, keyName), (entry) -> getValue(entry, valueName)));
     }
 
     public static void setValue(Object any, String name, Object value) {
@@ -162,7 +165,7 @@ public final class FastMethodInvoker {
                         try {
                             fastMethod = FastClass.create(any.getClass()).getMethod(methodName, null);
                         } catch (NoSuchMethodError e) {
-                            throw new RuntimeException(e);
+                            continue;
                         }
                     }
                     setCacheMethod(fastMethodKey, fastMethod);
