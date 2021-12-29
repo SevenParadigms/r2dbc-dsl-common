@@ -164,4 +164,8 @@ public abstract class JsonUtils {
     public static ArrayNode arrayNode() {
         return getMapper().createArrayNode();
     }
+
+    public static boolean isEmpty(final JsonNode json) {
+        return json == null || json.isNull() || json.isEmpty();
+    }
 }

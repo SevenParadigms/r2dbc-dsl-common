@@ -1,5 +1,6 @@
 package org.springframework.data.r2dbc.support;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.cglib.reflect.FastClass;
 import org.springframework.cglib.reflect.FastMethod;
@@ -87,6 +88,19 @@ public final class FastMethodInvoker {
             if (has(target, sourceField.getName())) {
                 var value = getValue(source, sourceField.getName());
                 if (value != null) {
+                    if (value instanceof JsonNode && ((JsonNode) value).isNull()) continue;
+                    setValue(target, sourceField.getName(), value);
+                }
+            }
+        }
+        return target;
+    }
+
+    public static <T> T copyToNull(Object source, T target) {
+        for (Field sourceField : reflectionStorage(source.getClass())) {
+            if (has(target, sourceField.getName())) {
+                var value = getValue(target, sourceField.getName());
+                if (value == null || (value instanceof JsonNode && ((JsonNode) value).isNull())) {
                     setValue(target, sourceField.getName(), value);
                 }
             }
