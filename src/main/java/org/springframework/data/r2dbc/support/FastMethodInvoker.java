@@ -96,7 +96,7 @@ public final class FastMethodInvoker {
         return target;
     }
 
-    public static <T> T copyToNull(Object source, T target) {
+    public static <T> T copyIsNull(Object source, T target) {
         for (Field sourceField : reflectionStorage(source.getClass())) {
             if (has(target, sourceField.getName())) {
                 var value = getValue(target, sourceField.getName());

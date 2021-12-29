@@ -30,7 +30,7 @@ fun <T> Any.copyTo(target: T): T = FastMethodInvoker.copy(this, target)
 
 fun <T> Any.copyNotNull(target: T): T = FastMethodInvoker.copyNotNull(this, target)
 
-fun <T> Any.copyToNull(target: T): T = FastMethodInvoker.copyToNull(this, target)
+fun <T> Any.copyToNull(target: T): T = FastMethodInvoker.copyIsNull(this, target)
 
 fun Any.has(name: String): Boolean = FastMethodInvoker.has(this, name)
 
