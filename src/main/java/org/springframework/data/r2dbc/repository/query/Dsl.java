@@ -43,7 +43,7 @@ public class Dsl implements Serializable {
     public static final String fts = "@@";
 
     public static Dsl create() {
-        return new Dsl(null, null, null, null, null, null);
+        return create(EMPTY);
     }
 
     public static Dsl create(String query) {
