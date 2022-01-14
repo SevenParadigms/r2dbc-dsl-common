@@ -8,15 +8,15 @@ import org.springframework.data.r2dbc.support.JsonUtils
 
 fun Any.objectToJson(): JsonNode = JsonUtils.objectToJson(this)
 
-fun <T> String.parseJson(cls: Class<T>): T = JsonUtils.stringToObject(this, cls)
+inline fun <reified T> String.parseJson(cls: Class<T>): T = JsonUtils.stringToObject(this, cls)
 
-fun <T> JsonNode.jsonToObject(cls: Class<T>): T = JsonUtils.jsonToObject(this, cls)
+inline fun <reified T> JsonNode.jsonToObject(cls: Class<T>): T = JsonUtils.jsonToObject(this, cls)
 
-fun <T> JsonNode.jsonToObjectList(cls: Class<T>): List<T> = JsonUtils.jsonToObjectList(this, cls)
+inline fun <reified T> JsonNode.jsonToObjectList(cls: Class<T>): List<T> = JsonUtils.jsonToObjectList(this, cls)
 
 fun String.toArrayNode(): ArrayNode = JsonUtils.getMapper().readTree(this) as ArrayNode
 
-fun <T> ArrayNode.has(value: T): Boolean = this.any { it.asText().equals(ConvertUtils.convert(value, String::class.java).toString()) }
+inline fun <reified T> ArrayNode.has(value: T): Boolean = this.any { it.asText().equals(ConvertUtils.convert(value, String::class.java).toString()) }
 
 fun JsonNode.singleQuotes(): String = this.toString().replace("\"", "'")
 
@@ -43,9 +43,5 @@ fun JsonNode.remove(key: Enum<*>): JsonNode = (this as ObjectNode).remove(key.na
 fun JsonNode.remove(key: String): JsonNode = (this as ObjectNode).remove(key)
 
 fun JsonNode.has(key: Enum<*>): Boolean = !isNull && !isEmpty && has(key.name)
-
-fun JsonNode.jsonToMap(): Map<String, *> = JsonUtils.jsonToMap(this)
-
-fun Map<String, *>.mapToJson(): JsonNode = JsonUtils.mapToJson(this)
 
 fun JsonNode.copyTo(target: JsonNode): JsonNode = JsonUtils.copy(this, target)

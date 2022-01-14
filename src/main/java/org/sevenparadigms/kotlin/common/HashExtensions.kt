@@ -8,4 +8,6 @@ fun String.murmur(): Int = MurmurHash3.hash32x86(this.toByteArray())
 
 fun String.sha512(): String = toByteArray().sha512()
 
-fun ByteArray.sha512(): String = MessageDigest.getInstance(MessageDigestAlgorithms.SHA_512).digest(this).convertString()
+fun ByteArray.sha512(): String = sha512AsBytes().convertString()
+
+fun ByteArray.sha512AsBytes(): ByteArray = MessageDigest.getInstance(MessageDigestAlgorithms.SHA_512).digest(this)
