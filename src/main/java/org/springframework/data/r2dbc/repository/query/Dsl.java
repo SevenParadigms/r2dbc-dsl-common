@@ -3,6 +3,7 @@ package org.springframework.data.r2dbc.repository.query;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.r2dbc.support.SQLInjectionSafe;
 import org.springframework.data.r2dbc.support.SqlField;
 
@@ -167,7 +168,7 @@ public class Dsl implements Serializable {
         return this;
     }
 
-    public Dsl in(String field, List<UUID> ids) {
+    public Dsl in(String field, @NotNull List<UUID> ids) {
         return in(field, ids.toArray(new UUID[0]));
     }
 
@@ -193,7 +194,7 @@ public class Dsl implements Serializable {
         return this;
     }
 
-    public Dsl notIn(String field, List<UUID> ids) {
+    public Dsl notIn(String field, @NotNull List<UUID> ids) {
         return notIn(field, ids.toArray(new UUID[0]));
     }
 
@@ -344,11 +345,11 @@ public class Dsl implements Serializable {
         return new ArrayList<>();
     }
 
-    public void setResultFields(List<String> fields) {
+    public void setResultFields(@NotNull List<String> fields) {
         this.fields = fields.toArray(new String[0]);
     }
 
-    private String start(String string) {
+    private String start(@NotNull String string) {
         if (string.trim().isEmpty())
             return EMPTY;
         else

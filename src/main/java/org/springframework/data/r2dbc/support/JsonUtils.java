@@ -13,6 +13,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -56,7 +57,8 @@ public abstract class JsonUtils {
         return getMapper().valueToTree(map);
     }
 
-    public static Map<String, ?> jsonToMap(final JsonNode json) {
+    @NotNull
+    public static Map<String, ?> jsonToMap(@NotNull final JsonNode json) {
         var map = new LinkedHashMap<String, Object>();
         var fieldNames = json.fieldNames();
         while (fieldNames.hasNext()) {
@@ -67,7 +69,7 @@ public abstract class JsonUtils {
         return map;
     }
 
-    public static JsonNode copy(final JsonNode source, final JsonNode target) {
+    public static JsonNode copy(@NotNull final JsonNode source, final JsonNode target) {
         var fieldNames = source.fieldNames();
         while (fieldNames.hasNext()) {
             var fieldName = fieldNames.next();
@@ -77,7 +79,7 @@ public abstract class JsonUtils {
         return target;
     }
 
-    public static Object nodeToObject(final JsonNode json) {
+    public static Object nodeToObject(@NotNull final JsonNode json) {
         var type = json.getNodeType();
         switch (type) {
             case ARRAY:
@@ -139,7 +141,8 @@ public abstract class JsonUtils {
         }
     }
 
-    public static <T> ArrayList<T> jsonToObjectList(final JsonNode json, final Class<T> cls) {
+    @NotNull
+    public static <T> ArrayList<T> jsonToObjectList(@NotNull final JsonNode json, final Class<T> cls) {
         var list = new ArrayList<T>();
         if (!json.isEmpty()) {
             var maps = JsonUtils.jsonToObject(json, ArrayList.class);

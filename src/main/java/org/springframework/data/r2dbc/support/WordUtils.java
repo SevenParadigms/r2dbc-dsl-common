@@ -2,6 +2,8 @@ package org.springframework.data.r2dbc.support;
 
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.util.StringUtils;
 
 /**
@@ -10,7 +12,8 @@ import org.springframework.util.StringUtils;
  * @author Lao Tsing
  */
 public abstract class WordUtils {
-    public static String sqlToCamel(final String sqlName) {
+    @NotNull
+    public static String sqlToCamel(@NotNull final String sqlName) {
         var parts = sqlName.split("_");
         var camelCaseString = new StringBuilder(parts[0]);
         if (parts.length > 1) {
@@ -22,21 +25,25 @@ public abstract class WordUtils {
         return camelCaseString.toString();
     }
 
-    public static String camelToSql(final String camel) {
+    @NotNull
+    public static String camelToSql(@NotNull final String camel) {
         return camel.replaceAll("[A-Z]", "_$0").toLowerCase();
     }
 
-    public static String trimInline(final String text) {
+    @NotNull
+    @Contract(pure = true)
+    public static String trimInline(@NotNull final String text) {
         return text.replaceAll("(\\s+\\n|\\n|\\s+)", " ");
     }
 
+    @NotNull
     public static String generateString(final int size) {
         return new RandomStringGenerator.Builder().withinRange('0', 'z')
                 .filteredBy(CharacterPredicates.DIGITS, CharacterPredicates.LETTERS)
                 .build().generate(size);
     }
 
-    public static String lastOctet(String fieldName) {
+    public static String lastOctet(@NotNull String fieldName) {
         return fieldName.contains(".") ? fieldName.substring(fieldName.lastIndexOf(".") + 1) : fieldName;
     }
 }

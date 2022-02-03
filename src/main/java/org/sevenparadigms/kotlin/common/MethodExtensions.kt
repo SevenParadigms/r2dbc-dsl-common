@@ -34,9 +34,9 @@ fun Class<*>.has(name: String): Boolean = FastMethodInvoker.has(this, name)
 
 fun Class<*>.has(name: Enum<*>): Boolean = FastMethodInvoker.has(this, name.name)
 
-fun Class<*>.getCachedField(name: Enum<*>): Field = FastMethodInvoker.getField(this, name.name)
+fun Class<*>.getCachedField(name: Enum<*>): Field? = FastMethodInvoker.getField(this, name.name)
 
-fun Class<*>.getCachedField(name: String): Field = FastMethodInvoker.getField(this, name)
+fun Class<*>.getCachedField(name: String): Field? = FastMethodInvoker.getField(this, name)
 
 fun Class<*>.getFields(name: Enum<*>, vararg annotations: Class<*>): Set<Field> = FastMethodInvoker.getFields(this, name.name, *annotations)
 
