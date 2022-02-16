@@ -125,7 +125,7 @@ public final class FastMethodInvoker {
                 .collect(Collectors.toMap((entry) -> (String) getValue(entry, keyName), (entry) -> getValue(entry, valueName)));
     }
 
-    public static void setValue(@NotNull Object any, String name, Object value) {
+    public static void setValue(@NotNull Object any, String name, @Nullable Object value) {
         for (Field field : reflectionStorage(any.getClass())) {
             if (field.getName().equals(name)) {
                 String methodName = SET + StringUtils.capitalize(name);
@@ -174,7 +174,7 @@ public final class FastMethodInvoker {
     }
 
     @Nullable
-    public static Object getValue(@NotNull Object any, String name) {
+    public static Object getValue(@NotNull Object any, @NotNull String name) {
         for (Field field : reflectionStorage(any.getClass())) {
             if (field.getName().equals(name) && !isStatic(field.getModifiers())) {
                 for (String prefix : Arrays.asList(GET, IS)) {
@@ -191,8 +191,7 @@ public final class FastMethodInvoker {
                     setCacheMethod(fastMethodKey, fastMethod);
                     try {
                         return fastMethod.invoke(any, null);
-                    } catch (InvocationTargetException e) {
-                    }
+                    } catch (InvocationTargetException ignored) {}
                 }
             }
         }
