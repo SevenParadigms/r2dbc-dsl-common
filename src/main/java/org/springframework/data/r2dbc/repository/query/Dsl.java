@@ -225,6 +225,11 @@ public class Dsl implements Serializable {
         return equals(SqlField.id, id);
     }
 
+    public Dsl id(Object id) {
+        if (id instanceof Number) return id((Number) id);
+        return equals(SqlField.id, id);
+    }
+
     public Dsl equals(String field, String value)  {
         return equals(field, (Object) value);
     }

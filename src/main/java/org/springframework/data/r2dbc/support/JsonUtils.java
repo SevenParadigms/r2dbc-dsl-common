@@ -126,6 +126,8 @@ public abstract class JsonUtils {
     }
 
     public static JsonNode objectToJson(final Object object) {
+        if (object instanceof String) return objectToJson((String) object);
+        if (object instanceof byte[]) return objectToJson((byte[]) object);
         return getMapper().convertValue(object, JsonNode.class);
     }
 

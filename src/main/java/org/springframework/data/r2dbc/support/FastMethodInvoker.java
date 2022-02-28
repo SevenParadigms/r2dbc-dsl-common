@@ -80,21 +80,40 @@ public final class FastMethodInvoker {
     }
 
     public static <T> T copy(@NotNull Object source, T target) {
-        for (Field sourceField : reflectionStorage(source.getClass())) {
-            if (has(target, sourceField.getName())) {
-                setValue(target, sourceField.getName(), getValue(source, sourceField.getName()));
+        for (Field targetField : reflectionStorage(target.getClass())) {
+            if (has(source, targetField.getName())) {
+                var sourceValue = getValue(source, targetField.getName());
+                var sourceField = getField(source.getClass(), targetField.getName());
+                assert sourceField != null;
+                if (sourceValue != null && !sourceField.getType().equals(targetField.getType())) {
+                    if (sourceValue instanceof Enum) {
+                        sourceValue = Enum.valueOf((Class<? extends Enum>) targetField.getType(), ((Enum) sourceValue).name());
+                    } else {
+                        sourceValue = stringToObject(ConvertUtils.convert(sourceValue), targetField.getType());
+                    }
+                }
+                setValue(target, targetField.getName(), sourceValue);
             }
         }
         return target;
     }
 
     public static <T> T copyNotNull(@NotNull Object source, T target) {
-        for (Field sourceField : reflectionStorage(source.getClass())) {
-            if (has(target, sourceField.getName())) {
-                var value = getValue(source, sourceField.getName());
-                if (value != null) {
-                    if (value instanceof JsonNode && ((JsonNode) value).isNull()) continue;
-                    setValue(target, sourceField.getName(), value);
+        for (Field targetField : reflectionStorage(target.getClass())) {
+            if (has(source, targetField.getName())) {
+                var sourceValue = getValue(source, targetField.getName());
+                if (sourceValue != null) {
+                    if (sourceValue instanceof JsonNode && ((JsonNode) sourceValue).isNull()) continue;
+                    var sourceField = getField(source.getClass(), targetField.getName());
+                    assert sourceField != null;
+                    if (!sourceField.getType().equals(targetField.getType())) {
+                        if (sourceValue instanceof Enum) {
+                            sourceValue = Enum.valueOf((Class<? extends Enum>) targetField.getType(), ((Enum) sourceValue).name());
+                        } else {
+                            sourceValue = stringToObject(ConvertUtils.convert(sourceValue), targetField.getType());
+                        }
+                    }
+                    setValue(target, targetField.getName(), sourceValue);
                 }
             }
         }
@@ -102,30 +121,42 @@ public final class FastMethodInvoker {
     }
 
     public static <T> T copyIsNull(@NotNull Object source, T target) {
-        for (Field sourceField : reflectionStorage(source.getClass())) {
-            if (has(target, sourceField.getName())) {
-                var value = getValue(target, sourceField.getName());
-                if (value == null || (value instanceof JsonNode && ((JsonNode) value).isNull())) {
-                    setValue(target, sourceField.getName(), value);
+        for (Field targetField : reflectionStorage(target.getClass())) {
+            if (has(source, targetField.getName())) {
+                var targetValue = getValue(target, targetField.getName());
+                if (targetValue == null || (targetValue instanceof JsonNode && ((JsonNode) targetValue).isNull())) {
+                    var sourceValue = getValue(source, targetField.getName());
+                    var sourceField = getField(source.getClass(), targetField.getName());
+                    assert sourceField != null;
+                    if (sourceValue != null && !sourceField.getType().equals(targetField.getType())) {
+                        if (sourceValue instanceof Enum) {
+                            sourceValue = Enum.valueOf((Class<? extends Enum>) targetField.getType(), ((Enum) sourceValue).name());
+                        } else {
+                            sourceValue = stringToObject(ConvertUtils.convert(sourceValue), targetField.getType());
+                        }
+                    }
+                    setValue(target, targetField.getName(), sourceValue);
                 }
             }
         }
         return target;
     }
 
+    @NotNull
     public static Map<String, ?> objectToMap(@NotNull Object any) {
         return reflectionStorage(any.getClass()).stream()
                 .filter(field -> !isStatic(field.getModifiers()) && getValue(any, field.getName()) != null)
                 .collect(Collectors.toMap(Field::getName, (field) -> getValue(any, field.getName())));
     }
 
-    public static Map<String, ?> objectsToMap(@NotNull Collection<?> collection, String keyName, String valueName) {
+    @NotNull
+    public static Map<String, ?> objectsToMap(@NotNull Collection<?> collection, @NotNull String keyName, @NotNull String valueName) {
         return collection.stream()
                 .filter(entry -> getValue(entry, valueName) != null)
                 .collect(Collectors.toMap((entry) -> (String) getValue(entry, keyName), (entry) -> getValue(entry, valueName)));
     }
 
-    public static void setValue(@NotNull Object any, String name, @Nullable Object value) {
+    public static void setValue(@NotNull Object any, @NotNull String name, @Nullable Object value) {
         for (Field field : reflectionStorage(any.getClass())) {
             if (field.getName().equals(name)) {
                 String methodName = SET + StringUtils.capitalize(name);
@@ -147,7 +178,7 @@ public final class FastMethodInvoker {
         }
     }
 
-    public static void setMapValues(Object any, @NotNull Map<String, ?> map) {
+    public static void setMapValues(@NotNull Object any, @NotNull Map<String, ?> map) {
         for (var name : map.keySet()) {
             for (Field field : reflectionStorage(any.getClass())) {
                 if (field.getName().equals(name)) {
@@ -191,7 +222,8 @@ public final class FastMethodInvoker {
                     setCacheMethod(fastMethodKey, fastMethod);
                     try {
                         return fastMethod.invoke(any, null);
-                    } catch (InvocationTargetException ignored) {}
+                    } catch (InvocationTargetException ignored) {
+                    }
                 }
             }
         }
@@ -223,9 +255,7 @@ public final class FastMethodInvoker {
                             setCacheMethod(fastMethodKey, fastMethod);
                         }
                         return fastMethod.invoke(null, new Object[]{object});
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    } catch (Exception ignore) {}
             }
         }
         return null;
@@ -264,12 +294,12 @@ public final class FastMethodInvoker {
     }
 
     @NotNull
-    public static Set<Field> getFields(Class<?> cls, String fiendName, Class<?>...annotations) {
+    public static Set<Field> getFields(Class<?> cls, String fiendName, Class<?>... annotations) {
         var result = new HashSet<Field>();
         if (has(cls, fiendName)) {
             result.add(getField(cls, fiendName));
         }
-        for(Class<?> ann : annotations) {
+        for (Class<?> ann : annotations) {
             var fields = getFieldsByAnnotation(cls, ann);
             result.addAll(fields);
         }
