@@ -2,8 +2,7 @@ package org.springframework.data.r2dbc.support;
 
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
 /**
@@ -12,8 +11,8 @@ import org.springframework.util.StringUtils;
  * @author Lao Tsing
  */
 public abstract class WordUtils {
-    @NotNull
-    public static String sqlToCamel(@NotNull final String sqlName) {
+    @NonNull
+    public static String sqlToCamel(@NonNull final String sqlName) {
         var parts = sqlName.split("_");
         var camelCaseString = new StringBuilder(parts[0]);
         if (parts.length > 1) {
@@ -25,25 +24,24 @@ public abstract class WordUtils {
         return camelCaseString.toString();
     }
 
-    @NotNull
-    public static String camelToSql(@NotNull final String camel) {
+    @NonNull
+    public static String camelToSql(@NonNull final String camel) {
         return camel.replaceAll("[A-Z]", "_$0").toLowerCase();
     }
 
-    @NotNull
-    @Contract(pure = true)
-    public static String trimInline(@NotNull final String text) {
+    @NonNull
+    public static String trimInline(@NonNull final String text) {
         return text.replaceAll("(\\s+\\n|\\n|\\s+)", " ");
     }
 
-    @NotNull
+    @NonNull
     public static String generateString(final int size) {
         return new RandomStringGenerator.Builder().withinRange('0', 'z')
                 .filteredBy(CharacterPredicates.DIGITS, CharacterPredicates.LETTERS)
                 .build().generate(size);
     }
 
-    public static String lastOctet(@NotNull String fieldName) {
+    public static String lastOctet(@NonNull String fieldName) {
         return fieldName.contains(".") ? fieldName.substring(fieldName.lastIndexOf(".") + 1) : fieldName;
     }
 }

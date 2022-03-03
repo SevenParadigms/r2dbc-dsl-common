@@ -2,8 +2,8 @@ package org.springframework.data.r2dbc.support;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.beanutils.ConvertUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.cglib.reflect.FastClass;
 import org.springframework.cglib.reflect.FastMethod;
 import org.springframework.util.ConcurrentReferenceHashMap;
@@ -58,12 +58,12 @@ public final class FastMethodInvoker {
         methodStorage.put(classKey, fastMethod);
     }
 
-    @NotNull
-    public static Boolean has(@NotNull Object any, String name) {
+    @NonNull
+    public static Boolean has(@NonNull Object any, String name) {
         return has(any.getClass(), name);
     }
 
-    @NotNull
+    @NonNull
     public static Boolean has(Class<?> cls, String name) {
         for (Field field : reflectionStorage(cls)) {
             if (field.getName().equals(name)) return true;
@@ -79,7 +79,7 @@ public final class FastMethodInvoker {
         return null;
     }
 
-    public static <T> T copy(@NotNull Object source, T target) {
+    public static <T> T copy(@NonNull Object source, T target) {
         for (Field targetField : reflectionStorage(target.getClass())) {
             if (has(source, targetField.getName())) {
                 var sourceValue = getValue(source, targetField.getName());
@@ -100,7 +100,7 @@ public final class FastMethodInvoker {
         return target;
     }
 
-    public static <T> T copyNotNull(@NotNull Object source, T target) {
+    public static <T> T copyNotNull(@NonNull Object source, T target) {
         for (Field targetField : reflectionStorage(target.getClass())) {
             if (has(source, targetField.getName())) {
                 var sourceValue = getValue(source, targetField.getName());
@@ -124,7 +124,7 @@ public final class FastMethodInvoker {
         return target;
     }
 
-    public static <T> T copyIsNull(@NotNull Object source, T target) {
+    public static <T> T copyIsNull(@NonNull Object source, T target) {
         for (Field targetField : reflectionStorage(target.getClass())) {
             if (has(source, targetField.getName())) {
                 var targetValue = getValue(target, targetField.getName());
@@ -148,21 +148,21 @@ public final class FastMethodInvoker {
         return target;
     }
 
-    @NotNull
-    public static Map<String, ?> objectToMap(@NotNull Object any) {
+    @NonNull
+    public static Map<String, ?> objectToMap(@NonNull Object any) {
         return reflectionStorage(any.getClass()).stream()
                 .filter(field -> !isStatic(field.getModifiers()) && getValue(any, field.getName()) != null)
                 .collect(Collectors.toMap(Field::getName, (field) -> getValue(any, field.getName())));
     }
 
-    @NotNull
-    public static Map<String, ?> objectsToMap(@NotNull Collection<?> collection, @NotNull String keyName, @NotNull String valueName) {
+    @NonNull
+    public static Map<String, ?> objectsToMap(@NonNull Collection<?> collection, @NonNull String keyName, @NonNull String valueName) {
         return collection.stream()
                 .filter(entry -> getValue(entry, valueName) != null)
                 .collect(Collectors.toMap((entry) -> (String) getValue(entry, keyName), (entry) -> getValue(entry, valueName)));
     }
 
-    public static void setValue(@NotNull Object any, @NotNull String name, @Nullable Object value) {
+    public static void setValue(@NonNull Object any, @NonNull String name, @Nullable Object value) {
         for (Field field : reflectionStorage(any.getClass())) {
             if (field.getName().equals(name)) {
                 String methodName = SET + StringUtils.capitalize(name);
@@ -184,7 +184,7 @@ public final class FastMethodInvoker {
         }
     }
 
-    public static void setMapValues(@NotNull Object any, @NotNull Map<String, ?> map) {
+    public static void setMapValues(@NonNull Object any, @NonNull Map<String, ?> map) {
         for (var name : map.keySet()) {
             for (Field field : reflectionStorage(any.getClass())) {
                 if (field.getName().equals(name)) {
@@ -211,7 +211,7 @@ public final class FastMethodInvoker {
     }
 
     @Nullable
-    public static Object getValue(@NotNull Object any, @NotNull String name) {
+    public static Object getValue(@NonNull Object any, @NonNull String name) {
         for (Field field : reflectionStorage(any.getClass())) {
             if (field.getName().equals(name) && !isStatic(field.getModifiers())) {
                 for (String prefix : Arrays.asList(GET, IS)) {
@@ -267,12 +267,12 @@ public final class FastMethodInvoker {
         return null;
     }
 
-    @NotNull
+    @NonNull
     public static Optional<Field> getFieldByAnnotation(final Class<?> cls, final Class<?> ann) {
         return getFieldsByAnnotation(cls, ann).stream().findFirst();
     }
 
-    @NotNull
+    @NonNull
     public static List<Field> getFieldsByAnnotation(final Class<?> cls, final Class<?> ann) {
         Class<?> c = cls;
         var result = new ArrayList<Field>();
@@ -299,7 +299,7 @@ public final class FastMethodInvoker {
         return result;
     }
 
-    @NotNull
+    @NonNull
     public static Set<Field> getFields(Class<?> cls, String fiendName, Class<?>... annotations) {
         var result = new HashSet<Field>();
         if (has(cls, fiendName)) {

@@ -1,7 +1,7 @@
 package org.sevenparadigms.kotlin.common
 
-import org.jetbrains.annotations.Nullable
 import org.springframework.data.r2dbc.support.FastMethodInvoker
+import org.springframework.lang.Nullable
 import java.lang.reflect.Field
 import java.util.*
 
