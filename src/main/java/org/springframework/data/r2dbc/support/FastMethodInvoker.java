@@ -89,7 +89,9 @@ public final class FastMethodInvoker {
                     if (sourceValue instanceof Enum) {
                         sourceValue = Enum.valueOf((Class<? extends Enum>) targetField.getType(), ((Enum) sourceValue).name());
                     } else {
-                        sourceValue = stringToObject(ConvertUtils.convert(sourceValue), targetField.getType());
+                        try {
+                            sourceValue = stringToObject(ConvertUtils.convert(sourceValue), targetField.getType());
+                        } catch (Exception ignore) {}
                     }
                 }
                 setValue(target, targetField.getName(), sourceValue);
@@ -110,7 +112,9 @@ public final class FastMethodInvoker {
                         if (sourceValue instanceof Enum) {
                             sourceValue = Enum.valueOf((Class<? extends Enum>) targetField.getType(), ((Enum) sourceValue).name());
                         } else {
-                            sourceValue = stringToObject(ConvertUtils.convert(sourceValue), targetField.getType());
+                            try {
+                                sourceValue = stringToObject(ConvertUtils.convert(sourceValue), targetField.getType());
+                            } catch (Exception ignore) {}
                         }
                     }
                     setValue(target, targetField.getName(), sourceValue);
@@ -132,7 +136,9 @@ public final class FastMethodInvoker {
                         if (sourceValue instanceof Enum) {
                             sourceValue = Enum.valueOf((Class<? extends Enum>) targetField.getType(), ((Enum) sourceValue).name());
                         } else {
-                            sourceValue = stringToObject(ConvertUtils.convert(sourceValue), targetField.getType());
+                            try {
+                                sourceValue = stringToObject(ConvertUtils.convert(sourceValue), targetField.getType());
+                            } catch (Exception ignore) {}
                         }
                     }
                     setValue(target, targetField.getName(), sourceValue);

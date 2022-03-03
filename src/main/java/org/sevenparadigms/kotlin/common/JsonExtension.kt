@@ -16,7 +16,7 @@ inline fun <reified T> JsonNode.jsonToObjectList(cls: Class<T>): List<T> = JsonU
 
 fun String.toArrayNode(): ArrayNode = JsonUtils.getMapper().readTree(this) as ArrayNode
 
-inline fun <reified T> ArrayNode.has(value: T): Boolean = this.any { it.asText().equals(ConvertUtils.convert(value, String::class.java).toString()) }
+inline fun <reified T> ArrayNode.has(value: T): Boolean = this.any { it.asText().equals(ConvertUtils.convert(value).toString()) }
 
 fun JsonNode.singleQuotes(): String = this.toString().replace("\"", "'")
 
