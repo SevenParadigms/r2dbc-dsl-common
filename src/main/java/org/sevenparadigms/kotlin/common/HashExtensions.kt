@@ -13,6 +13,6 @@ fun String.murmur128(): LongArray = MurmurHash3.hash128x64(this.toByteArray())
 
 fun String.sha512(): String = toByteArray().sha512()
 
-fun ByteArray.sha512(): String = sha512AsBytes().convertString()
+fun ByteArray.sha512(): String = sha512ByteArray().convertString()
 
-fun ByteArray.sha512AsBytes(): ByteArray = MessageDigest.getInstance(MessageDigestAlgorithms.SHA_512).digest(this)
+fun ByteArray.sha512ByteArray(): ByteArray = MessageDigest.getInstance(MessageDigestAlgorithms.SHA_512).digest(this)

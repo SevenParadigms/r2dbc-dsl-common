@@ -45,3 +45,15 @@ fun JsonNode.remove(key: String): JsonNode = (this as ObjectNode).remove(key)
 fun JsonNode.has(key: Enum<*>): Boolean = !isNull && !isEmpty && has(key.name)
 
 fun JsonNode.copyTo(target: JsonNode): JsonNode = JsonUtils.copy(this, target)
+
+fun ObjectNode.put(key: Enum<*>, value: String): JsonNode = this.put(key.name, value)
+
+fun ObjectNode.put(key: Enum<*>, value: Int): JsonNode = this.put(key.name, value)
+
+fun ObjectNode.put(key: Enum<*>, value: Boolean): JsonNode = this.put(key.name, value)
+
+fun ObjectNode.put(key: Enum<*>, value: Long): JsonNode = this.put(key.name, value)
+
+fun ObjectNode.has(key: Enum<*>): Boolean = !isNull && !isEmpty && has(key.name)
+
+fun ObjectNode.get(key: Enum<*>): JsonNode = this.get(key.name)
