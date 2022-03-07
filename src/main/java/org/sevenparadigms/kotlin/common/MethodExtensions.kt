@@ -9,9 +9,13 @@ fun Any.setValue(name: String, @Nullable value: Any) = FastMethodInvoker.setValu
 
 fun Any.getValue(name: String): Any? = FastMethodInvoker.getValue(this, name)
 
+inline fun <reified T> Any.getValue(name: String, cls: Class<T>): T = FastMethodInvoker.getValue(this, name, cls) as T
+
 fun Any.setValue(name: Enum<*>, value: Any) = FastMethodInvoker.setValue(this, name.name, value)
 
 fun Any.getValue(name: Enum<*>): Any? = FastMethodInvoker.getValue(this, name.name)
+
+inline fun <reified T> Any.getValue(name: Enum<*>, cls: Class<T>): T = FastMethodInvoker.getValue(this, name.name, cls) as T
 
 inline fun <reified T> String.stringToObject(cls: Class<T>): T = FastMethodInvoker.stringToObject(this, cls) as T
 

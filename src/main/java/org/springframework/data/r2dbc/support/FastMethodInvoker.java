@@ -211,6 +211,11 @@ public final class FastMethodInvoker {
     }
 
     @Nullable
+    public static <T> T getValue(@NonNull Object any, @NonNull String name, final Class<T> cls) {
+        return (T) getValue(any, name);
+    }
+
+    @Nullable
     public static Object getValue(@NonNull Object any, @NonNull String name) {
         for (Field field : reflectionStorage(any.getClass())) {
             if (field.getName().equals(name) && !isStatic(field.getModifiers())) {
