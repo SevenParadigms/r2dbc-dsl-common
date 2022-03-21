@@ -7,12 +7,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import org.springframework.data.r2dbc.expression.ExpressionDeserializer;
+import org.springframework.data.r2dbc.expression.ExpressionSerializer;
+import org.springframework.expression.Expression;
 import org.springframework.lang.NonNull;
 
 import java.io.IOException;
@@ -33,8 +37,12 @@ public abstract class JsonUtils {
     static {
         var javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(ZonedDateTime.class, new ZonedDateTimeSerializer(DateTimeFormatter.ISO_ZONED_DATE_TIME));
+        var expressionModule = new SimpleModule();
+        expressionModule.addSerializer(Expression.class, new ExpressionSerializer());
+        expressionModule.addDeserializer(Expression.class, new ExpressionDeserializer());
         OBJECT_MAPPER = new ObjectMapper()
                 .registerModule(javaTimeModule)
+                .registerModule(expressionModule)
                 .registerModule(new Jdk8Module())
                 .registerModule(new ParameterNamesModule())
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)

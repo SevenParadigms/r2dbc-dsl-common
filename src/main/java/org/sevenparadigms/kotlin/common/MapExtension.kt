@@ -22,6 +22,10 @@ fun Map<String, Any?>.putIfNotEmpty(name: String, value: Any?) =
 
 fun Map<String, Any?>.putIfNotEmpty(name: Enum<*>, value: Any?) = putIfNotEmpty(name.name, value)
 
+fun HashMap<String, *>.clone() = HashMap(this)
+
 fun ConcurrentHashMap<String, *>.clone() = ConcurrentHashMap(this)
 
 fun HashMap<String, Any?>.add(name: Enum<*>, value: Any?) = put(name.name, value)
+
+fun ConcurrentHashMap<String, Any?>.add(name: Enum<*>, value: Any) = put(name.name, value)
