@@ -30,9 +30,9 @@ public final class FastMethodInvoker {
     private static final String NUMBER_REGEX = "^\\d+$";
     private static final String BOOLEAN_REGEX = "^(true|false)$";
     private static final String DOUBLE_REGEX = "^\\d+\\.\\d+$";
-    private static final ConcurrentMap<Class<?>, List<Field>> reflectionStorage = new ConcurrentReferenceHashMap<>(720);
-    private static final ConcurrentMap<String, FastMethod> methodStorage = new ConcurrentReferenceHashMap<>(720);
-    private static final ConcurrentMap<String, Boolean> annotationStorage = new ConcurrentReferenceHashMap<>(720);
+    private static final ConcurrentMap<Class<?>, List<Field>> reflectionStorage = new ConcurrentReferenceHashMap<>(256);
+    private static final ConcurrentMap<String, FastMethod> methodStorage = new ConcurrentReferenceHashMap<>(512);
+    private static final ConcurrentMap<String, Boolean> annotationStorage = new ConcurrentReferenceHashMap<>();
     private static final String SET = "set", GET = "get", IS = "is", DOT = ".";
 
     public static List<Field> reflectionStorage(Class<?> classKey) {
@@ -283,19 +283,21 @@ public final class FastMethodInvoker {
         var result = new ArrayList<Field>();
         while (c != null) {
             for (Field field : reflectionStorage(c)) {
-                var key = ann.getSimpleName().concat(c.getSimpleName()).concat(field.getName());
+                var key = ann.getSimpleName().concat("_").concat(c.getSimpleName()).concat("_").concat(field.getName());
                 if (annotationStorage.containsKey(key)) {
-                    if (annotationStorage.get(key)) {
+                    if (annotationStorage.get(key) && !result.contains(field)) {
                         result.add(field);
                     }
                 } else {
-                    Annotation[] annotations = field.getDeclaredAnnotations();
+                    var annotations = field.getDeclaredAnnotations();
                     for (Annotation annotation : annotations) {
-                        if (annotation.annotationType() == ann) {
+                        if (annotation.annotationType() == ann && !result.contains(field)) {
                             annotationStorage.put(key, true);
                             result.add(field);
-                        } else
-                            annotationStorage.put(key, false);
+                        }
+                    }
+                    if (!result.contains(field)) {
+                        annotationStorage.put(key, false);
                     }
                 }
             }
