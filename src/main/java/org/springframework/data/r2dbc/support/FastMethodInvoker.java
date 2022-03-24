@@ -285,13 +285,13 @@ public final class FastMethodInvoker {
             for (Field field : reflectionStorage(c)) {
                 var key = ann.getSimpleName().concat("_").concat(c.getSimpleName()).concat("_").concat(field.getName());
                 if (annotationStorage.containsKey(key)) {
-                    if (annotationStorage.get(key) && !result.contains(field)) {
+                    if (annotationStorage.get(key)) {
                         result.add(field);
                     }
                 } else {
                     var annotations = field.getDeclaredAnnotations();
                     for (Annotation annotation : annotations) {
-                        if (annotation.annotationType() == ann && !result.contains(field)) {
+                        if (annotation.annotationType() == ann) {
                             annotationStorage.put(key, true);
                             result.add(field);
                         }
