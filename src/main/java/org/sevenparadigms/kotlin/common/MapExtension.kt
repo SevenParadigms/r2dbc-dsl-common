@@ -5,6 +5,7 @@ import org.apache.commons.lang3.ObjectUtils
 import org.springframework.data.r2dbc.support.FastMethodInvoker
 import org.springframework.data.r2dbc.support.JsonUtils
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
 fun JsonNode.jsonToMap(): Map<String, *> = JsonUtils.jsonToMap(this)
 
@@ -22,9 +23,25 @@ fun Map<String, Any?>.putIfNotEmpty(name: String, value: Any?) =
 
 fun Map<String, Any?>.putIfNotEmpty(name: Enum<*>, value: Any?) = putIfNotEmpty(name.name, value)
 
-fun HashMap<String, *>.clone() = HashMap(this)
+fun Map<String, *>.copy(vararg target: Map<String, *>): HashMap<String, *> {
+    val source = HashMap(this)
+    if (ObjectUtils.isNotEmpty(target)) {
+        for (map in target) {
+            source.putAll(map)
+        }
+    }
+    return source
+}
 
-fun ConcurrentHashMap<String, *>.clone() = ConcurrentHashMap(this)
+fun ConcurrentMap<String, *>.copy(vararg target: ConcurrentMap<String, *>): ConcurrentHashMap<String, *> {
+    val source = ConcurrentHashMap(this)
+    if (ObjectUtils.isNotEmpty(target)) {
+        for (map in target) {
+            source.putAll(map)
+        }
+    }
+    return source
+}
 
 fun HashMap<String, Any?>.add(name: Enum<*>, value: Any?) = put(name.name, value)
 

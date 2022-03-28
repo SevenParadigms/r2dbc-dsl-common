@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class ExpressionParserCache implements ExpressionParser {
     public static final ExpressionParserCache INSTANCE = new ExpressionParserCache();
+
     private static final Map<String, Expression> CACHE = new ConcurrentHashMap<>(512);
     private static final ExpressionParser PARSER = new SpelExpressionParser();
 
