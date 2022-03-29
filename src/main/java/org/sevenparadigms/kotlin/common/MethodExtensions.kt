@@ -1,5 +1,7 @@
 package org.sevenparadigms.kotlin.common
 
+import org.apache.commons.lang3.ObjectUtils
+import org.apache.commons.lang3.StringUtils
 import org.springframework.data.r2dbc.support.FastMethodInvoker
 import org.springframework.lang.Nullable
 import java.lang.reflect.Field
@@ -19,9 +21,9 @@ inline fun <reified T> Any.getValue(name: Enum<*>, cls: Class<T>): T = FastMetho
 
 inline fun <reified T> String.stringToObject(cls: Class<T>): T = FastMethodInvoker.stringToObject(this, cls) as T
 
-fun Class<*>.getFieldByAnnotation(cls: Class<*>): Optional<Field> = FastMethodInvoker.getFieldByAnnotation(this, cls)
+fun Any.getFieldByAnnotation(cls: Class<*>): Optional<Field> = FastMethodInvoker.getFieldByAnnotation(this.javaClass, cls)
 
-fun Class<*>.getFieldsByAnnotation(cls: Class<*>): List<Field> = FastMethodInvoker.getFieldsByAnnotation(this, cls)
+fun Any.getFieldsByAnnotation(cls: Class<*>): List<Field> = FastMethodInvoker.getFieldsByAnnotation(this.javaClass, cls)
 
 fun Any.setMapValues(map: Map<String, Any>) = FastMethodInvoker.setMapValues(this, map)
 
@@ -41,10 +43,16 @@ fun Class<*>.has(name: String): Boolean = FastMethodInvoker.has(this, name)
 
 fun Class<*>.has(name: Enum<*>): Boolean = FastMethodInvoker.has(this, name.name)
 
-fun Class<*>.getCachedField(name: Enum<*>): Field? = FastMethodInvoker.getField(this, name.name)
+fun Any.getCachedField(name: Enum<*>): Field? = FastMethodInvoker.getField(this.javaClass, name.name)
 
-fun Class<*>.getCachedField(name: String): Field? = FastMethodInvoker.getField(this, name)
+fun Any.getCachedField(name: String): Field? = FastMethodInvoker.getField(this.javaClass, name)
 
-fun Class<*>.getFields(name: Enum<*>, vararg annotations: Class<*>): Set<Field> = FastMethodInvoker.getFields(this, name.name, *annotations)
+fun Any.getFields(name: Enum<*>, vararg annotations: Class<*>): Set<Field> = FastMethodInvoker.getFields(this.javaClass, name.name, *annotations)
 
-fun Class<*>.getFields(name: String, vararg annotations: Class<*>): Set<Field> = FastMethodInvoker.getFields(this, name, *annotations)
+fun Any.getFields(name: String, vararg annotations: Class<*>): Set<Field> = FastMethodInvoker.getFields(this.javaClass, name, *annotations)
+
+fun Any.getFields(vararg annotations: Class<*>): Set<Field> =
+    if (ObjectUtils.isNotEmpty(annotations))
+        FastMethodInvoker.getFields(this.javaClass, StringUtils.EMPTY, *annotations)
+    else
+        HashSet(FastMethodInvoker.reflectionStorage((this.javaClass)))

@@ -2,10 +2,11 @@ package org.springframework.data.r2dbc.support;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.beanutils.ConvertUtils;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.cglib.reflect.FastClass;
 import org.springframework.cglib.reflect.FastMethod;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.util.ConcurrentReferenceHashMap;
 import org.springframework.util.StringUtils;
 
@@ -309,12 +310,14 @@ public final class FastMethodInvoker {
     @NonNull
     public static Set<Field> getFields(Class<?> cls, String fiendName, Class<?>... annotations) {
         var result = new HashSet<Field>();
-        if (has(cls, fiendName)) {
+        if (!ObjectUtils.isEmpty(fiendName) && has(cls, fiendName)) {
             result.add(getField(cls, fiendName));
         }
-        for (Class<?> ann : annotations) {
-            var fields = getFieldsByAnnotation(cls, ann);
-            result.addAll(fields);
+        if (ObjectUtils.isNotEmpty(annotations)) {
+            for (Class<?> ann : annotations) {
+                var fields = getFieldsByAnnotation(cls, ann);
+                result.addAll(fields);
+            }
         }
         return result;
     }
