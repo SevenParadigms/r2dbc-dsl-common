@@ -44,4 +44,11 @@ public abstract class WordUtils {
     public static String lastOctet(@NonNull String fieldName) {
         return fieldName.contains(".") ? fieldName.substring(fieldName.lastIndexOf(".") + 1) : fieldName;
     }
+
+    public static String removeAfter(@NonNull String source, @NonNull String template) {
+        if (source.indexOf(template) > 0)
+            return source.substring(0, source.indexOf(template));
+        else
+            return source;
+    }
 }

@@ -3,13 +3,17 @@ package org.springframework.data.r2dbc.repository.query;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.lang.NonNull;
 import org.springframework.data.r2dbc.support.SQLInjectionSafe;
 import org.springframework.data.r2dbc.support.SqlField;
+import org.springframework.data.r2dbc.support.WordUtils;
+import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -242,6 +246,18 @@ public class Dsl implements Serializable {
         return equals(field, ConvertUtils.convert(value, String.class));
     }
 
+    public Dsl equals(String field, LocalDate value)  {
+        return equals(field, (Object) value);
+    }
+
+    public Dsl equals(String field, LocalDateTime value)  {
+        return equals(field, (Object) value);
+    }
+
+    public Dsl equals(String field, ZonedDateTime value)  {
+        return equals(field, (Object) WordUtils.removeAfter(value.toString(), "+"));
+    }
+
     public Dsl equals(String field, Object value) {
         if (field != null && value != null) {
             query = start(query) + field + equal + value;
@@ -275,6 +291,18 @@ public class Dsl implements Serializable {
         return notEquals(field, ConvertUtils.convert(value, String.class));
     }
 
+    public Dsl notEquals(String field, LocalDate value)  {
+        return notEquals(field, (Object) value);
+    }
+
+    public Dsl notEquals(String field, LocalDateTime value)  {
+        return notEquals(field, (Object) value);
+    }
+
+    public Dsl notEquals(String field, ZonedDateTime value)  {
+        return notEquals(field, (Object) WordUtils.removeAfter(value.toString(), "+"));
+    }
+
     public Dsl notEquals(String field, Object value) {
         if (field != null && value != null) {
             query = start(query) + field + notEqual + value;
@@ -306,6 +334,83 @@ public class Dsl implements Serializable {
     public Dsl lessThanOrEquals(String field, Number value) {
         if (field != null && value != null) {
             query = start(query) + field + lessEqual + value;
+        }
+        return this;
+    }
+
+    public Dsl greaterThan(String field, LocalDate value) {
+        if (field != null && value != null) {
+            query = start(query) + field + greater + value;
+        }
+        return this;
+    }
+
+    public Dsl greaterThanOrEquals(String field, LocalDate value) {
+        if (field != null && value != null) {
+            query = start(query) + field + greaterEqual + value;
+        }
+        return this;
+    }
+
+    public Dsl lessThan(String field, LocalDate value) {
+        if (field != null && value != null) {
+            query = start(query) + field + less + value;
+        }
+        return this;
+    }
+
+    public Dsl lessThanOrEquals(String field, LocalDate value) {
+        if (field != null && value != null) {
+            query = start(query) + field + lessEqual + value;
+        }
+        return this;
+    }
+
+    public Dsl greaterThan(String field, LocalDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + greater + value;
+        }
+        return this;
+    }
+
+    public Dsl greaterThanOrEquals(String field, LocalDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + greaterEqual + value;
+        }
+        return this;
+    }
+
+    public Dsl lessThan(String field, LocalDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + less + value;
+        }
+        return this;
+    }
+
+    public Dsl greaterThan(String field, ZonedDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + greater + WordUtils.removeAfter(value.toString(), "+");
+        }
+        return this;
+    }
+
+    public Dsl greaterThanOrEquals(String field, ZonedDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + greaterEqual + WordUtils.removeAfter(value.toString(), "+");
+        }
+        return this;
+    }
+
+    public Dsl lessThan(String field, ZonedDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + less + WordUtils.removeAfter(value.toString(), "+");
+        }
+        return this;
+    }
+
+    public Dsl lessThanOrEquals(String field, ZonedDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + lessEqual +  WordUtils.removeAfter(value.toString(), "+");
         }
         return this;
     }
