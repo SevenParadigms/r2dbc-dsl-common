@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -255,7 +256,11 @@ public class Dsl implements Serializable {
     }
 
     public Dsl equals(String field, ZonedDateTime value)  {
-        return equals(field, (Object) WordUtils.removeAfter(value.toString(), "+"));
+        return equals(field, (Object) WordUtils.removeAfter(value.toString(), "["));
+    }
+
+    public Dsl equals(String field, OffsetDateTime value)  {
+        return equals(field, (Object) value);
     }
 
     public Dsl equals(String field, Object value) {
@@ -300,7 +305,11 @@ public class Dsl implements Serializable {
     }
 
     public Dsl notEquals(String field, ZonedDateTime value)  {
-        return notEquals(field, (Object) WordUtils.removeAfter(value.toString(), "+"));
+        return notEquals(field, (Object) WordUtils.removeAfter(value.toString(), "["));
+    }
+
+    public Dsl notEquals(String field, OffsetDateTime value)  {
+        return notEquals(field, (Object) value);
     }
 
     public Dsl notEquals(String field, Object value) {
@@ -396,28 +405,56 @@ public class Dsl implements Serializable {
 
     public Dsl greaterThan(String field, ZonedDateTime value) {
         if (field != null && value != null) {
-            query = start(query) + field + greater + WordUtils.removeAfter(value.toString(), "+");
+            query = start(query) + field + greater + WordUtils.removeAfter(value.toString(), "[");
         }
         return this;
     }
 
     public Dsl greaterThanOrEquals(String field, ZonedDateTime value) {
         if (field != null && value != null) {
-            query = start(query) + field + greaterEqual + WordUtils.removeAfter(value.toString(), "+");
+            query = start(query) + field + greaterEqual + WordUtils.removeAfter(value.toString(), "[");
         }
         return this;
     }
 
     public Dsl lessThan(String field, ZonedDateTime value) {
         if (field != null && value != null) {
-            query = start(query) + field + less + WordUtils.removeAfter(value.toString(), "+");
+            query = start(query) + field + less + WordUtils.removeAfter(value.toString(), "[");
         }
         return this;
     }
 
     public Dsl lessThanOrEquals(String field, ZonedDateTime value) {
         if (field != null && value != null) {
-            query = start(query) + field + lessEqual +  WordUtils.removeAfter(value.toString(), "+");
+            query = start(query) + field + lessEqual +  WordUtils.removeAfter(value.toString(), "[");
+        }
+        return this;
+    }
+
+    public Dsl greaterThan(String field, OffsetDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + greater + value;
+        }
+        return this;
+    }
+
+    public Dsl greaterThanOrEquals(String field, OffsetDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + greaterEqual + value;
+        }
+        return this;
+    }
+
+    public Dsl lessThan(String field, OffsetDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + less + value;
+        }
+        return this;
+    }
+
+    public Dsl lessThanOrEquals(String field, OffsetDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + lessEqual + value;
         }
         return this;
     }
