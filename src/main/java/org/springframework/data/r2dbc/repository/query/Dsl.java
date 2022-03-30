@@ -387,6 +387,13 @@ public class Dsl implements Serializable {
         return this;
     }
 
+    public Dsl lessThanOrEquals(String field, LocalDateTime value) {
+        if (field != null && value != null) {
+            query = start(query) + field + lessEqual + value;
+        }
+        return this;
+    }
+
     public Dsl greaterThan(String field, ZonedDateTime value) {
         if (field != null && value != null) {
             query = start(query) + field + greater + WordUtils.removeAfter(value.toString(), "+");
