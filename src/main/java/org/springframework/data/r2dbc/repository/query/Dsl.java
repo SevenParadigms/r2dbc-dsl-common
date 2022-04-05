@@ -137,6 +137,14 @@ public class Dsl implements Serializable {
         return this;
     }
 
+    public Dsl sorting(String sorting) {
+        if (!sort.isEmpty()) {
+            sort += COMMA;
+        }
+        sort += sorting;
+        return this;
+    }
+
     public Dsl order(String field, Enum<?> ascDesc) {
         if (!sort.isEmpty()) {
             sort += COMMA;
