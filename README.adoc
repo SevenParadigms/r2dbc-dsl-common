@@ -7,7 +7,7 @@ Library provides common models and utils for `R2DBC-DSL`.
 <dependency>
   <groupId>io.github.sevenparadigms</groupId>
   <artifactId>spring-data-r2dbc-dsl-common</artifactId>
-  <version>4.7.2</version>
+  <version>4.7.3</version>
 </dependency>
 ----
 

@@ -14,6 +14,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.r2dbc.expression.ExpressionDeserializer;
 import org.springframework.data.r2dbc.expression.ExpressionSerializer;
 import org.springframework.expression.Expression;
@@ -75,6 +76,15 @@ public abstract class JsonUtils {
             map.put(fieldName, nodeToObject(jsonNode));
         }
         return map;
+    }
+
+    public static JsonNode copy(@NonNull final JsonNode target, final JsonNode... sources) {
+        if (ObjectUtils.isNotEmpty(sources)) {
+            for (var source : sources) {
+                copy(source, target);
+            }
+        }
+        return target;
     }
 
     public static JsonNode copy(@NonNull final JsonNode source, final JsonNode target) {

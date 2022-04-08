@@ -33,10 +33,10 @@ fun Map<String, *>.copy(vararg target: Map<String, *>): HashMap<String, *> {
     return source
 }
 
-fun ConcurrentMap<String, *>.copy(vararg target: ConcurrentMap<String, *>): ConcurrentHashMap<String, *> {
+fun ConcurrentMap<String, *>.copy(vararg sources: ConcurrentMap<String, *>): ConcurrentHashMap<String, *> {
     val source = ConcurrentHashMap(this)
-    if (ObjectUtils.isNotEmpty(target)) {
-        for (map in target) {
+    if (ObjectUtils.isNotEmpty(sources)) {
+        for (map in sources) {
             source.putAll(map)
         }
     }

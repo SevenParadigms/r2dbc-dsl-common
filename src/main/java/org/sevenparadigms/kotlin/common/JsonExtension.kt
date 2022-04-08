@@ -44,7 +44,7 @@ fun JsonNode.remove(key: String): JsonNode = (this as ObjectNode).remove(key)
 
 fun JsonNode.has(key: Enum<*>): Boolean = !isNull && !isEmpty && has(key.name)
 
-fun JsonNode.copyTo(target: JsonNode): JsonNode = JsonUtils.copy(this, target)
+fun JsonNode.copy(vararg sources: JsonNode): JsonNode = JsonUtils.copy(this.deepCopy(), *sources)
 
 fun ObjectNode.put(key: Enum<*>, value: String): JsonNode = this.put(key.name, value)
 
