@@ -7,7 +7,7 @@ Library provides common models and utils for `R2DBC-DSL`.
 <dependency>
   <groupId>io.github.sevenparadigms</groupId>
   <artifactId>spring-data-r2dbc-dsl-common</artifactId>
-  <version>4.7.3</version>
+  <version>4.7.4</version>
 </dependency>
 ----
 
@@ -17,4 +17,4 @@ Library provides common models and utils for `R2DBC-DSL`.
 
 * Utility class `JsonUtils` is a powerful utils to flexibility manage any json operations around JsonNode type.
 
-* Utility class `R2dbcUtils` can create repository from database url
+* Utility class `R2dbcUtils` can create repository from database url and PostgreSQL native batching with high performance  

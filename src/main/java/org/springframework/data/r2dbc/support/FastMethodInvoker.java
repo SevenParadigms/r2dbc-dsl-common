@@ -27,10 +27,11 @@ import static java.lang.reflect.Modifier.isStatic;
  * @author Lao Tsing
  */
 public final class FastMethodInvoker {
-    private static final String UUID_REGEX = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
-    private static final String NUMBER_REGEX = "^\\d+$";
-    private static final String BOOLEAN_REGEX = "^(true|false)$";
-    private static final String DOUBLE_REGEX = "^\\d+\\.\\d+$";
+    public static final String UUID_REGEX = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
+    public static final String NUMBER_REGEX = "^\\d+$";
+    public static final String BOOLEAN_REGEX = "^(true|false)$";
+    public static final String DOUBLE_REGEX = "^\\d+\\.\\d+$";
+
     private static final ConcurrentMap<Class<?>, List<Field>> reflectionStorage = new ConcurrentReferenceHashMap<>(256);
     private static final ConcurrentMap<String, FastMethod> methodStorage = new ConcurrentReferenceHashMap<>(512);
     private static final ConcurrentMap<String, Boolean> annotationStorage = new ConcurrentReferenceHashMap<>();
