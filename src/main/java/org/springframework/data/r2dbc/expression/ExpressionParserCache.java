@@ -6,12 +6,10 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.ParseException;
 import org.springframework.expression.ParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
 public class ExpressionParserCache implements ExpressionParser {
     public static final ExpressionParserCache INSTANCE = new ExpressionParserCache();
 
