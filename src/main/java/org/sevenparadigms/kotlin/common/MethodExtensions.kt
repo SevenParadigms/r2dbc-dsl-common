@@ -56,3 +56,6 @@ fun Any.getFields(vararg annotations: Class<*>): Set<Field> =
         FastMethodInvoker.getFields(this.javaClass, StringUtils.EMPTY, *annotations)
     else
         HashSet(FastMethodInvoker.reflectionStorage((this.javaClass)))
+
+fun Class<*>.getClasses(): List<Class<*>> = FastMethodInvoker.findClasses(this.packageName)
+    .filter { !it.isSingleton }.map { Class.forName(it.beanClassName) }
