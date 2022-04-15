@@ -1,8 +1,10 @@
 package org.sevenparadigms.kotlin.common
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.apache.commons.lang3.ObjectUtils
 import org.apache.commons.lang3.StringUtils
 import org.springframework.data.r2dbc.support.FastMethodInvoker
+import org.springframework.data.r2dbc.support.JsonUtils
 import org.springframework.lang.Nullable
 import java.lang.reflect.Field
 import java.util.*
@@ -59,3 +61,5 @@ fun Any.getFields(vararg annotations: Class<*>): Set<Field> =
 
 fun Class<*>.getClasses(): List<Class<*>> = FastMethodInvoker.findClasses(this.packageName)
     .filter { !it.isSingleton }.map { Class.forName(it.beanClassName) }
+
+inline fun <reified T> Any.clone(vararg sources: Any): T = FastMethodInvoker.clone(this, *sources) as T

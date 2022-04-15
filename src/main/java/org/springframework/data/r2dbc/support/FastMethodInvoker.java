@@ -14,6 +14,7 @@ import org.springframework.util.ConcurrentReferenceHashMap;
 import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
@@ -339,5 +340,23 @@ public final class FastMethodInvoker {
 		final ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
 		provider.addIncludeFilter(new RegexPatternTypeFilter(Pattern.compile(".*")));
 		return provider.findCandidateComponents(javaPackage);
+	}
+
+	public static <T> T clone(@NonNull final T source, final Object... sources) {
+		T clone;
+		try {
+			Constructor<?> constructor = source.getClass().getDeclaredConstructor();
+			constructor.setAccessible(true);
+			clone = (T) constructor.newInstance();
+			FastMethodInvoker.copy(source, clone);
+			if (ObjectUtils.isNotEmpty(sources)) {
+				for (var src : sources) {
+					FastMethodInvoker.copy(src, clone);
+				}
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return clone;
 	}
 }

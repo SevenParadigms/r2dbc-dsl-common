@@ -26,7 +26,9 @@ public abstract class WordUtils {
 
     @NonNull
     public static String camelToSql(@NonNull final String camel) {
-        return camel.replaceAll("[A-Z]", "_$0").toLowerCase();
+        var string = camel.replaceAll("[A-Z]", "_$0").toLowerCase();
+        if (string.startsWith("_")) string = string.substring(1);
+        return string;
     }
 
     @NonNull

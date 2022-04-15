@@ -517,4 +517,9 @@ public class Dsl implements Serializable {
         else
             return string + COMMA;
     }
+
+    @JsonIgnore
+    public int getCriteriaCount() {
+        return getQuery().split(Dsl.COMMA).length - (getQuery().isEmpty() ? 1 : 0);
+    }
 }
