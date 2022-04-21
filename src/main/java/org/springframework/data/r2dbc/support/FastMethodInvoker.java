@@ -169,7 +169,7 @@ public final class FastMethodInvoker {
 	public static Map<String, ?> objectsToMap(@NonNull Collection<?> collection, @NonNull String keyName, @NonNull String valueName) {
 		return collection.stream()
 				.filter(entry -> getValue(entry, valueName) != null)
-				.collect(Collectors.toMap((entry) -> (String) getValue(entry, keyName), (entry) -> getValue(entry, valueName)));
+				.collect(Collectors.toMap((entry) -> ConvertUtils.convert(getValue(entry, keyName)), (entry) -> getValue(entry, valueName)));
 	}
 
 	public static void setValue(@NonNull Object any, @NonNull String name, @Nullable Object value) {
