@@ -12,17 +12,11 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 internal class JsonUtilsTest {
-    var objectMapper = ObjectMapper()
-    var node: JsonNode = objectMapper.createObjectNode()
-    var source1: JsonNode = objectMapper.createObjectNode()
-    var source2: JsonNode = objectMapper.createObjectNode()
-    var target: JsonNode = objectMapper.createObjectNode()
-    var array: JsonNode = objectMapper.createObjectNode().arrayNode()
 
     @Test
     fun mapToJson() {
         val map: MutableMap<String, Any> = HashMap()
-        map.put("a", 1)
+        map["a"] = 1
         val jsonNode = JsonUtils.mapToJson(map)
         assertThat(jsonNode, notNullValue())
         assertThat(jsonNode.javaClass, equalTo<Class<out JsonNode>>(ObjectNode::class.java))
@@ -31,8 +25,10 @@ internal class JsonUtilsTest {
 
     @Test
     fun jsonToMap() {
+        val objectMapper = ObjectMapper()
+        val node: JsonNode = objectMapper.createObjectNode()
         (node as ObjectNode).put("id", 5)
-        (node as ObjectNode).put("name", "Slava")
+        node.put("name", "Slava")
         val map = JsonUtils.jsonToMap(node)
         assertThat(map, notNullValue())
         assertThat(map, hasKey("id"))
@@ -42,20 +38,27 @@ internal class JsonUtilsTest {
 
     @Test
     fun copyWithParameterOneSource() {
+        val objectMapper = ObjectMapper()
+        val source1: JsonNode = objectMapper.createObjectNode()
+        val target: JsonNode = objectMapper.createObjectNode()
         (source1 as ObjectNode).put("id", 5)
-        (source1 as ObjectNode).put("name", "Slava")
+        source1.put("name", "Slava")
         JsonUtils.copy(source1, target)
         assertThat(target, notNullValue())
-        assertThat(target.javaClass, equalTo<Class<out JsonNode>>(ObjectNode::class.java))
+        assertThat(target.javaClass, equalTo(ObjectNode::class.java))
         assertThat(target.size(), `is`(2))
     }
 
     @Test
     fun copyWithParameterVarargsSources() {
+        val objectMapper = ObjectMapper()
+        val source1: JsonNode = objectMapper.createObjectNode()
+        val source2: JsonNode = objectMapper.createObjectNode()
+        val target: JsonNode = objectMapper.createObjectNode()
         (source1 as ObjectNode).put("id", 5)
-        (source1 as ObjectNode).put("name", "Slava")
+        (source1).put("name", "Slava")
         (source2 as ObjectNode).put("id", 2)
-        (source2 as ObjectNode).put("name", "Vasya")
+        (source2).put("name", "Vasya")
         val jsonNodes = arrayOfNulls<JsonNode>(2)
         jsonNodes[0] = source1
         jsonNodes[1] = source2
@@ -67,6 +70,8 @@ internal class JsonUtilsTest {
 
     @Test
     fun nodeToObject() {
+        val objectMapper = ObjectMapper()
+        val array: JsonNode = objectMapper.createObjectNode().arrayNode()
         val result = JsonUtils.nodeToObject(array)
         assertThat(result, notNullValue())
         assertThat(result.javaClass, equalTo<Class<out Any>>(ArrayList::class.java))
@@ -100,8 +105,10 @@ internal class JsonUtilsTest {
 
     @Test
     fun jsonToObject() {
+        val objectMapper = ObjectMapper()
+        val source1: JsonNode = objectMapper.createObjectNode()
         (source1 as ObjectNode).put("id", 5)
-        (source1 as ObjectNode).put("name", "Slava")
+        source1.put("name", "Slava")
         val result = JsonUtils.jsonToObject<Any>(source1, Any::class.java)
         assertThat(result, notNullValue())
         assertThat(result is Map<*, *>, `is`(true))
@@ -110,8 +117,8 @@ internal class JsonUtilsTest {
     @Test
     fun stringToObject() {
         val s = "some text"
-        assertThrows<IllegalArgumentException>(IllegalArgumentException::class.java) {
-            JsonUtils.stringToObject<MutableMap<*, *>>(
+        assertThrows(IllegalArgumentException::class.java) {
+            JsonUtils.stringToObject(
                 s,
                 MutableMap::class.java
             )
