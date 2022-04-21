@@ -309,15 +309,15 @@ public class Dsl implements Serializable {
     }
 
     public Dsl notEquals(String field, LocalDateTime value)  {
-        return notEquals(field, (Object) value);
+        return notEquals(field, (Object) WordUtils.dateTimeToString(value.toString()));
     }
 
     public Dsl notEquals(String field, ZonedDateTime value)  {
-        return notEquals(field, (Object) WordUtils.removeAfter(value.toString(), "["));
+        return notEquals(field, (Object) WordUtils.dateTimeToString(value.toString()));
     }
 
     public Dsl notEquals(String field, OffsetDateTime value)  {
-        return notEquals(field, (Object) value);
+        return notEquals(field, (Object) WordUtils.dateTimeToString(value.toString()));
     }
 
     public Dsl notEquals(String field, Object value) {

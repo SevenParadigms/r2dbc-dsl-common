@@ -53,4 +53,11 @@ public abstract class WordUtils {
         else
             return source;
     }
+
+    public static String dateTimeToString(Object dateTime) {
+        var string = dateTime.toString().replaceAll("Z", "");
+        string = WordUtils.removeAfter(string, "+");
+        string = WordUtils.removeAfter(string, "[");
+        return string;
+    }
 }

@@ -1,11 +1,12 @@
 package org.springframework.data.r2dbc.repository.query;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MementoPage<T> implements Serializable {
-    private MementoPageRequest page;
-    private List<T> content;
+    private MementoPageRequest page = new MementoPageRequest(Dsl.create(), 0L);
+    private List<T> content = new ArrayList<>();
 
     public MementoPage() {}
 

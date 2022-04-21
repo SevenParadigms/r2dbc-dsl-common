@@ -7,7 +7,7 @@ Library provides common models and utils for `R2DBC-DSL`
 <dependency>
   <groupId>io.github.sevenparadigms</groupId>
   <artifactId>spring-data-r2dbc-dsl-common</artifactId>
-  <version>4.7.7</version>
+  <version>4.7.9</version>
 </dependency>
 ----
 
@@ -15,4 +15,6 @@ Library provides common models and utils for `R2DBC-DSL`
 
 * Utility class `FastMethodInvoker` is a modern and powerful reflection access to object properties, in performance comparable to direct access
 
-* Utility class `JsonUtils` is a flexibility manage any json operations around JsonNode type, both operation serialization and deserialization executed by ObjectMapper performance is over 1000 per nanosecond.
+* Utility class `JsonUtils` is a flexibility manage any json operations around JsonNode type, both operation serialization and deserialization executed by ObjectMapper performance is over 1000 per millisecond
+
+* A lot Kotlin powerful extensions: Json, Map, FastMethod, Log, String, Hash, Expression, Dsl, ByteArray
