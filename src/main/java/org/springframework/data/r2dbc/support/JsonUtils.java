@@ -149,6 +149,14 @@ public abstract class JsonUtils {
         return getMapper().convertValue(object, JsonNode.class);
     }
 
+    public static Map<String, Object> objectToMap(final Object object) {
+        return getMapper().convertValue(object, Map.class);
+    }
+
+    public static <T> T mapToObject(final Map<String, Object> map, final Class<T> cls) {
+        return getMapper().convertValue(map, cls);
+    }
+
     public static <T> T jsonToObject(final JsonNode json, final Class<T> cls) {
         return getMapper().convertValue(json, cls);
     }
