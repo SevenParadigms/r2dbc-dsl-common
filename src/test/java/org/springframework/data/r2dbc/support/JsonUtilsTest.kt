@@ -104,12 +104,24 @@ internal class JsonUtilsTest {
     }
 
     @Test
+    fun objectToMap() {
+        class User(var age: Int, var name: String)
+
+        val objectMapper = ObjectMapper()
+        val user = User(4, "Slava")
+        val map = objectMapper.convertValue(user, MutableMap::class.java)
+        assertThat(map, notNullValue())
+        assertThat(map.containsKey("age"), equalTo(true))
+        assertThat(map.containsValue("Slava"), equalTo(true))
+    }
+
+    @Test
     fun jsonToObject() {
         val objectMapper = ObjectMapper()
         val source1: JsonNode = objectMapper.createObjectNode()
         (source1 as ObjectNode).put("id", 5)
         source1.put("name", "Slava")
-        val result = JsonUtils.jsonToObject<Any>(source1, Any::class.java)
+        val result = JsonUtils.jsonToObject(source1, Any::class.java)
         assertThat(result, notNullValue())
         assertThat(result is Map<*, *>, `is`(true))
     }
