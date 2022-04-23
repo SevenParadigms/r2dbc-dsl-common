@@ -17,7 +17,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
@@ -38,7 +41,7 @@ public final class FastMethodInvoker {
 	public static final String DOUBLE_REGEX = "^\\d+\\.\\d+$";
 
 	private static final ConcurrentMap<Class<?>, List<Field>> reflectionStorage = new ConcurrentReferenceHashMap<>(256);
-	private static final ConcurrentMap<String, FastMethod> methodStorage = new ConcurrentReferenceHashMap<>(512);
+	private static final ConcurrentMap<String, FastMethod> methodStorage = new ConcurrentReferenceHashMap<>(256);
 	private static final ConcurrentMap<String, Boolean> annotationStorage = new ConcurrentReferenceHashMap<>();
 	private static final String SET = "set", GET = "get", IS = "is", DOT = ".";
 
@@ -264,7 +267,15 @@ public final class FastMethodInvoker {
 					else
 						return null;
 				case "BigInteger":
-					return BigInteger.valueOf(Long.parseLong(object));
+					if (object.matches(NUMBER_REGEX))
+						return BigInteger.valueOf(Long.parseLong(object));
+					else
+						return null;
+				case "BigDecimal":
+					if (object.matches(DOUBLE_REGEX) || object.matches(NUMBER_REGEX))
+						return new BigDecimal(Double.parseDouble(object), new MathContext(4, RoundingMode.HALF_EVEN));
+					else
+						return null;
 				case "byte[]":
 					return object.getBytes(StandardCharsets.UTF_8);
 				default:
@@ -342,15 +353,15 @@ public final class FastMethodInvoker {
 		return provider.findCandidateComponents(javaPackage);
 	}
 
-	public static <T> T clone(@NonNull final T source, final Object... sources) {
+	public static <T> T clone(@NonNull final T source, final Object... copy) {
 		T clone;
 		try {
 			Constructor<?> constructor = source.getClass().getDeclaredConstructor();
 			constructor.setAccessible(true);
 			clone = (T) constructor.newInstance();
 			FastMethodInvoker.copy(source, clone);
-			if (ObjectUtils.isNotEmpty(sources)) {
-				for (var src : sources) {
+			if (ObjectUtils.isNotEmpty(copy)) {
+				for (var src : copy) {
 					FastMethodInvoker.copy(src, clone);
 				}
 			}
