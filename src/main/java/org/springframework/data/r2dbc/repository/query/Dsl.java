@@ -53,16 +53,18 @@ public class Dsl implements Serializable {
     }
 
     public static Dsl create(String query) {
-        return new Dsl(query, null, null, null, null, null);
+        return new Dsl(query, null, null, null, null, null, null, null);
     }
 
-    public Dsl(final String query, final Integer page, final Integer size, final String sort, final String lang, final String fields) {
+    public Dsl(final String query, final Integer page, final Integer size, final String sort, final String lang, final String fields, final Integer top, final Boolean distinct) {
         this.query = query != null ? query : EMPTY;
         this.page = page != null ? page : -1;
         this.size = size != null ? size : -1;
         this.sort = !ObjectUtils.isEmpty(sort) ? sort : EMPTY;
         this.lang = !ObjectUtils.isEmpty(lang) ? lang : EMPTY;
         this.fields = !ObjectUtils.isEmpty(fields) ? fields.split(COMMA) : new String[0];
+        this.top = top != null ? top : -1;
+        this.distinct = distinct != null ? distinct : false;
     }
 
     private String query;
@@ -73,9 +75,21 @@ public class Dsl implements Serializable {
     private String sort;
     @JsonIgnore
     private Boolean orSignal = false;
+    private Integer top;
+    private Boolean distinct;
 
     public Dsl or() {
         this.orSignal = true;
+        return this;
+    }
+
+    public Dsl top(Integer top) {
+        this.top = top;
+        return this;
+    }
+
+    public Dsl distinct() {
+        this.distinct = true;
         return this;
     }
 
@@ -113,6 +127,14 @@ public class Dsl implements Serializable {
 
     public String getSort() {
         return sort;
+    }
+
+    public Integer getTop() {
+        return top;
+    }
+
+    public Boolean getDistinct() {
+        return distinct;
     }
 
     @JsonIgnore
