@@ -71,6 +71,13 @@ public class Dsl implements Serializable {
     private Integer page;
     private Integer size;
     private String sort;
+    @JsonIgnore
+    private Boolean orSignal = false;
+
+    public Dsl or() {
+        this.orSignal = true;
+        return this;
+    }
 
     public String getQuery() {
         String decodedQuery = null;
@@ -514,8 +521,13 @@ public class Dsl implements Serializable {
     private String start(@NonNull String string) {
         if (string.trim().isEmpty())
             return EMPTY;
-        else
+        else {
+            if (orSignal) {
+                orSignal = false;
+                return string + COMMA + "()";
+            }
             return string + COMMA;
+        }
     }
 
     @JsonIgnore
