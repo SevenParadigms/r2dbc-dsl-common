@@ -15,6 +15,6 @@ Library provides common models and utils for `R2DBC-DSL`
 
 * Utility class `FastMethodInvoker` is a modern and powerful reflection access to object properties, in performance comparable to direct access
 
-* Utility class `JsonUtils` is a flexibility manage any json operations around JsonNode type, both operation serialization and deserialization executed by ObjectMapper performance is over 1000 per millisecond
+* Utility class `JsonUtils` is a flexibility manage any json operations around JsonNode type, both operation serialization and deserialization executed by ObjectMapper in performance over 1000 times per millisecond
 
 * A lot Kotlin powerful extensions: Json, Map, FastMethod, Log, String, Hash, Expression, Dsl, ByteArray
