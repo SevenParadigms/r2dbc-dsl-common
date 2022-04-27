@@ -128,11 +128,11 @@ internal class JsonUtilsTest {
         val map: MutableMap<String, Any> = HashMap()
         map["age"] = 1
         map["name"] = "Slava"
-        val user = FastMethodInvokerTest1.User()
+        val user = User()
         val userR = objectMapper.convertValue(map, user.javaClass)
         assertThat(userR, notNullValue())
-        assertThat(userR.getAge(), equalTo(1))
-        assertThat(userR.getName(), equalTo("Slava"))
+        assertThat(userR.age, equalTo(1))
+        assertThat(userR.name, equalTo("Slava"))
     }
 
     @Test
