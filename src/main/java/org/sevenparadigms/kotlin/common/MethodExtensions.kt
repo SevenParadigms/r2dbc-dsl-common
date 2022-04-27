@@ -59,7 +59,7 @@ fun Any.getFields(vararg annotations: Class<*>): Set<Field> =
     else
         HashSet(FastMethodInvoker.reflectionStorage((this.javaClass)))
 
-fun Class<*>.getClasses(): List<Class<*>> = FastMethodInvoker.findClasses(this.packageName)
+fun Class<*>.findClasses(): List<Class<*>> = FastMethodInvoker.findClasses(this.packageName)
     .filter { !it.isSingleton }.map { Class.forName(it.beanClassName) }
 
 inline fun <reified T> Any.clone(vararg sources: Any): T = FastMethodInvoker.clone(this, *sources) as T
