@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
 internal class WordUtilsTest {
+
     @Test
     fun `should return Camel from Sql`() {
         val sqlName = "first_column_name"

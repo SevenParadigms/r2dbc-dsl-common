@@ -23,37 +23,37 @@ internal class BeansTest {
 
     @Test
     fun `should return bean from beanType`() {
-        val of = Beans.of(beans!!.objectMapper().javaClass)
-        assertThat(of, notNullValue())
-        assertThat(of.javaClass.name, equalTo(ObjectMapper::class.java.name))
+        val result = Beans.of(beans!!.objectMapper().javaClass)
+        assertThat(result, notNullValue())
+        assertThat(result.javaClass.name, equalTo(ObjectMapper::class.java.name))
     }
 
     @Test
     fun `should return empty when parameter is null`() {
         class User(var age: Int, var name: String)
 
-        val orNull: Optional<User> = Beans.getOrNull(User::class.java)
-        assertThat(orNull, `is`(Optional.empty<Any>()))
+        val result: Optional<User> = Beans.getOrNull(User::class.java)
+        assertThat(result, `is`(Optional.empty<Any>()))
     }
 
     @Test
     fun `should return bean when parameter is not null`() {
-        val orNull: Optional<out ObjectMapper?> = Beans.getOrNull(beans!!.objectMapper().javaClass)
-        assertThat(orNull.toString().contains("ObjectMapper"), `is`(true))
+        val result: Optional<out ObjectMapper?> = Beans.getOrNull(beans!!.objectMapper().javaClass)
+        assertThat(result.toString().contains("ObjectMapper"), `is`(true))
     }
 
     @Test
     fun `should put bean to cache and return this bean if parameter not null`() {
-        val add = Beans.add(beans!!.objectMapper())
-        assertThat(add, notNullValue())
-        assertThat(add!!.javaClass.name, equalTo(ObjectMapper::class.java.name))
+        val result = Beans.add(beans!!.objectMapper())
+        assertThat(result, notNullValue())
+        assertThat(result!!.javaClass.name, equalTo(ObjectMapper::class.java.name))
     }
 
     @Test
     fun `should register bean in context and return this bean`() {
-        val register = Beans.register(beans!!.objectMapper())
-        assertThat(register, notNullValue())
-        assertThat(register.javaClass.typeName, equalTo(ObjectMapper::class.java.typeName))
+        val result = Beans.register(beans!!.objectMapper())
+        assertThat(result, notNullValue())
+        assertThat(result.javaClass.typeName, equalTo(ObjectMapper::class.java.typeName))
     }
 
     @Test
