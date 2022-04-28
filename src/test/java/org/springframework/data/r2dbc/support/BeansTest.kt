@@ -24,6 +24,7 @@ internal class BeansTest {
     @Test
     fun `should return bean from beanType`() {
         val result = Beans.of(beans!!.objectMapper().javaClass)
+
         assertThat(result, notNullValue())
         assertThat(result.javaClass.name, equalTo(ObjectMapper::class.java.name))
     }
@@ -33,18 +34,21 @@ internal class BeansTest {
         class User(var age: Int, var name: String)
 
         val result: Optional<User> = Beans.getOrNull(User::class.java)
+
         assertThat(result, `is`(Optional.empty<Any>()))
     }
 
     @Test
     fun `should return bean when parameter is not null`() {
         val result: Optional<out ObjectMapper?> = Beans.getOrNull(beans!!.objectMapper().javaClass)
+
         assertThat(result.toString().contains("ObjectMapper"), `is`(true))
     }
 
     @Test
     fun `should put bean to cache and return this bean if parameter not null`() {
         val result = Beans.add(beans!!.objectMapper())
+
         assertThat(result, notNullValue())
         assertThat(result!!.javaClass.name, equalTo(ObjectMapper::class.java.name))
     }
@@ -52,6 +56,7 @@ internal class BeansTest {
     @Test
     fun `should register bean in context and return this bean`() {
         val result = Beans.register(beans!!.objectMapper())
+
         assertThat(result, notNullValue())
         assertThat(result.javaClass.typeName, equalTo(ObjectMapper::class.java.typeName))
     }
@@ -59,6 +64,7 @@ internal class BeansTest {
     @Test
     fun `should register bean in context and return this bean when second parameter is constructor args`() {
         Beans.register(ObjectMapper::class.java, jsonFactory)
+
         assert(Beans.getApplicationContext() != null)
         assertThat(Beans.getApplicationContext()!!.containsBean("objectMapper"), `is`(true))
     }
@@ -69,6 +75,7 @@ internal class BeansTest {
 
         val user = User(1, "A")
         val result = Beans.putCache(user)
+
         assertThat(result, notNullValue())
         assertThat(result.javaClass.typeName, equalTo(User::class.java.typeName))
         assertThat(result.id, `is`(1))
