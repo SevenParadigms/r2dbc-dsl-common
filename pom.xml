@@ -77,10 +77,9 @@
 		<dokka.version>1.5.31</dokka.version>
 
 		<junit.jupiter>5.8.2</junit.jupiter>
-		<spring-boot-test>2.6.5</spring-boot-test>
-		<mockito-core>4.0.0</mockito-core>
+		<spring-boot-test>2.6.7</spring-boot-test>
+		<mockito-core>4.5.1</mockito-core>
 		<hamcrest-all>1.3</hamcrest-all>
-		<spring-test>5.3.17</spring-test>
 	</properties>
 
 	<dependencyManagement>
@@ -236,7 +235,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring-test}</version>
+            <version>${spring.core}</version>
             <scope>test</scope>
         </dependency>
 
