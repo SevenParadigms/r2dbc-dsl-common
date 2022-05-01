@@ -8,6 +8,7 @@ import org.springframework.cglib.reflect.FastClass;
 import org.springframework.cglib.reflect.FastMethod;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.RegexPatternTypeFilter;
+import org.springframework.data.r2dbc.expression.ExpressionParserCache;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ConcurrentReferenceHashMap;
@@ -266,6 +267,8 @@ public final class FastMethodInvoker {
 						return UUID.fromString(object);
 					else
 						return null;
+				case "Expression":
+					return ExpressionParserCache.INSTANCE.parseExpression(object);
 				case "BigInteger":
 					if (object.matches(NUMBER_REGEX))
 						return BigInteger.valueOf(Long.parseLong(object));

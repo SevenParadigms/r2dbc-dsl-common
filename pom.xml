@@ -5,7 +5,7 @@
 
 	<groupId>io.github.sevenparadigms</groupId>
 	<artifactId>spring-data-r2dbc-dsl-common</artifactId>
-	<version>4.8.3</version>
+	<version>4.8.4</version>
 
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -16,7 +16,7 @@
 	<name>Spring Data R2DBC DSL Common</name>
 	<description>Common library for Spring Data DSL</description>
 	<url>https://github.com/SevenParadigms/r2dbc-dsl-common.git</url>
-	<inceptionYear>2021</inceptionYear>
+	<inceptionYear>2020</inceptionYear>
 	<organization>
 		<name>SevenParadigms™</name>
 	</organization>
@@ -266,6 +266,15 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<dokkaPlugins>
+						<plugin>
+							<groupId>org.jetbrains.dokka</groupId>
+							<artifactId>kotlin-as-java-plugin</artifactId>
+							<version>${dokka.version}</version>
+						</plugin>
+					</dokkaPlugins>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
