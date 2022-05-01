@@ -17,6 +17,6 @@ fun String.sqlToCamel(sqlName: String): String = WordUtils.sqlToCamel(sqlName)
 fun String.binding(regex: String, vararg arr: String): String {
     var i = 0
     var result = this
-    Regex(regex).findAll(this).map { it.value }.forEach { result = result.replace(it, arr[i++]) }
+    Regex(regex).findAll(this).map { it.value }.forEach { result = result.replaceFirst(it, arr[i++]) }
     return result
 }
