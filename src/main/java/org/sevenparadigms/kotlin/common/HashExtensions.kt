@@ -16,3 +16,7 @@ fun String.sha512(): String = toByteArray().sha512()
 fun ByteArray.sha512(): String = sha512ByteArray().convertString()
 
 fun ByteArray.sha512ByteArray(): ByteArray = MessageDigest.getInstance(MessageDigestAlgorithms.SHA_512).digest(this)
+
+fun ByteArray.sha512_256(): String = sha512_256ByteArray().convertString()
+
+fun ByteArray.sha512_256ByteArray(): ByteArray = MessageDigest.getInstance(MessageDigestAlgorithms.SHA_512_256).digest(this)

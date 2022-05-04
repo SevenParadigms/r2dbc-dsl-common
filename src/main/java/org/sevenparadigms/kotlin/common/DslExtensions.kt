@@ -1,6 +1,10 @@
 package org.sevenparadigms.kotlin.common
 
 import org.springframework.data.r2dbc.repository.query.Dsl
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZonedDateTime
 import java.util.*
 
 fun Dsl.order(name: Enum<*>, ascDesc: Enum<*>): Dsl = order(name.name, ascDesc)
@@ -39,6 +43,38 @@ fun Dsl.lessThan(name: Enum<*>, value: Number): Dsl = lessThan(name.name, value)
 
 fun Dsl.lessThanOrEquals(name: Enum<*>, value: Number): Dsl = lessThanOrEquals(name.name, value)
 
+fun Dsl.greaterThan(name: Enum<*>, value: LocalDate): Dsl = greaterThan(name.name, value)
+
+fun Dsl.greaterThanOrEquals(name: Enum<*>, value: LocalDate): Dsl = greaterThanOrEquals(name.name, value)
+
+fun Dsl.lessThan(name: Enum<*>, value: LocalDate): Dsl = lessThan(name.name, value)
+
+fun Dsl.lessThanOrEquals(name: Enum<*>, value: LocalDate): Dsl = lessThanOrEquals(name.name, value)
+
+fun Dsl.greaterThan(name: Enum<*>, value: LocalDateTime): Dsl = greaterThan(name.name, value)
+
+fun Dsl.greaterThanOrEquals(name: Enum<*>, value: LocalDateTime): Dsl = greaterThanOrEquals(name.name, value)
+
+fun Dsl.lessThan(name: Enum<*>, value: LocalDateTime): Dsl = lessThan(name.name, value)
+
+fun Dsl.lessThanOrEquals(name: Enum<*>, value: LocalDateTime): Dsl = lessThanOrEquals(name.name, value)
+
+fun Dsl.greaterThan(name: Enum<*>, value: ZonedDateTime): Dsl = greaterThan(name.name, value)
+
+fun Dsl.greaterThanOrEquals(name: Enum<*>, value: ZonedDateTime): Dsl = greaterThanOrEquals(name.name, value)
+
+fun Dsl.lessThan(name: Enum<*>, value: ZonedDateTime): Dsl = lessThan(name.name, value)
+
+fun Dsl.lessThanOrEquals(name: Enum<*>, value: ZonedDateTime): Dsl = lessThanOrEquals(name.name, value)
+
+fun Dsl.greaterThan(name: Enum<*>, value: OffsetDateTime): Dsl = greaterThan(name.name, value)
+
+fun Dsl.greaterThanOrEquals(name: Enum<*>, value: OffsetDateTime): Dsl = greaterThanOrEquals(name.name, value)
+
+fun Dsl.lessThan(name: Enum<*>, value: OffsetDateTime): Dsl = lessThan(name.name, value)
+
+fun Dsl.lessThanOrEquals(name: Enum<*>, value: OffsetDateTime): Dsl = lessThanOrEquals(name.name, value)
+
 fun Dsl.isNull(name: Enum<*>): Dsl = isNull(name.name)
 
 fun Dsl.isNotNull(name: Enum<*>): Dsl = isNotNull(name.name)
@@ -47,4 +83,4 @@ fun Dsl.like(name: Enum<*>, value: String): Dsl = like(name.name, value)
 
 fun Dsl.fts(name: Enum<*>, value: String): Dsl = fts(name.name, value)
 
-fun Dsl.generateHash(): Int = "$query $page $size $sort ${Arrays.toString(fields)}".murmur32()
+fun Dsl.lang(name: Enum<*>): Dsl = lang(name.name)

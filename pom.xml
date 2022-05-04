@@ -5,7 +5,7 @@
 
 	<groupId>io.github.sevenparadigms</groupId>
 	<artifactId>spring-data-r2dbc-dsl-common</artifactId>
-	<version>4.8.4</version>
+	<version>4.8.5</version>
 
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -74,7 +74,7 @@
 
 		<jackson.version>2.13.2</jackson.version>
 		<jackson-databind.version>2.13.2.2</jackson-databind.version>
-		<dokka.version>1.5.31</dokka.version>
+		<dokka.version>1.6.21</dokka.version>
 
 		<junit.jupiter>5.8.2</junit.jupiter>
 		<spring-boot-test>2.6.7</spring-boot-test>
@@ -238,8 +238,6 @@
             <version>${spring.core}</version>
             <scope>test</scope>
         </dependency>
-
-
 	</dependencies>
 
 	<build>
@@ -247,7 +245,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.10.1</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>

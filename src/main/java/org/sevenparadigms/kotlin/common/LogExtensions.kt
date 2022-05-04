@@ -27,7 +27,7 @@ fun Any.info(message: String, vararg args: Any) = LogExtensions.getLogger(javaCl
 
 fun Any.warn(message: String, vararg args: Any) = LogExtensions.getLogger(javaClass, WARNING)?.warn(message, args)
 
-fun Any.error(message: String, vararg args: Any) = LogExtensions.getLogger(javaClass, SEVERE)?.error(message, args)
+fun Any.severe(message: String, vararg args: Any) = LogExtensions.getLogger(javaClass, SEVERE)?.error(message, args)
 
 fun Any.debug(message: String, vararg args: Any) = LogExtensions.getLogger(javaClass, FINE)?.debug(message, args)
 
@@ -51,7 +51,7 @@ fun Any.warn(messageCallable: Callable<String>) = LogExtensions.getLogger(javaCl
     it.warn(messageCallable.call())
 }
 
-fun Any.error(messageCallable: Callable<String>) = LogExtensions.getLogger(javaClass, SEVERE)?.also {
+fun Any.severe(messageCallable: Callable<String>) = LogExtensions.getLogger(javaClass, SEVERE)?.also {
     it.error(messageCallable.call())
 }
 
