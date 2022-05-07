@@ -12,7 +12,9 @@ abstract public class SqlField {
     public static final String value = "value";
     public static final String code = "code";
     public static final String data = "data";
+    public static final String jdata = "jdata";
     public static final String jtree = "jtree";
+    public static final String jfolderId = "jfolderId";
     public static final String domainType = "domainType";
     public static final String target = "target";
     public static final String condition = "condition";
