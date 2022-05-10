@@ -5,7 +5,7 @@
 
 	<groupId>io.github.sevenparadigms</groupId>
 	<artifactId>spring-data-r2dbc-dsl-common</artifactId>
-	<version>4.8.6</version>
+	<version>4.8.7</version>
 
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -63,7 +63,6 @@
 
 	<properties>
 		<spring.core>5.3.19</spring.core>
-		<spring.boot>2.5.7</spring.boot>
 		<kotlin.version>1.6.21</kotlin.version>
 		<kotlinx.version>1.6.1-native-mt</kotlinx.version>
 
