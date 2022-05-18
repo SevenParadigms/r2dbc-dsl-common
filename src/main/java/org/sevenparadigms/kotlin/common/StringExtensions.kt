@@ -23,4 +23,4 @@ fun String.binding(regex: String, vararg arr: String): String {
     return result
 }
 
-fun String.hasVariable(name: Enum<*>) = contains("((^| +|\t+)+$name(\\s+|)=)".toRegex())
+fun String.hasVariable(name: Enum<*>) = contains("(=( +|\t+|)+$name(\\.))".toRegex())
