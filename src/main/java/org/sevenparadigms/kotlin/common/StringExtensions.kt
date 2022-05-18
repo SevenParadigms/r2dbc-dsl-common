@@ -17,6 +17,10 @@ fun String.sqlToCamel(sqlName: String): String = WordUtils.sqlToCamel(sqlName)
 fun String.binding(regex: String, vararg arr: String): String {
     var i = 0
     var result = this
-    Regex(regex).findAll(this).map { it.value }.forEach { result = result.replaceFirst(it, arr[i++]) }
+    Regex(regex).findAll(this).map { it.value }.forEach {
+        if (i < arr.size) result = result.replaceFirst(it, arr[i++])
+    }
     return result
 }
+
+fun String.hasVariable(name: Enum<*>) = contains("((^| +|\t+)+$name(\\s+|)=)".toRegex())

@@ -84,3 +84,7 @@ fun Dsl.like(name: Enum<*>, value: String): Dsl = like(name.name, value)
 fun Dsl.fts(name: Enum<*>, value: String): Dsl = fts(name.name, value)
 
 fun Dsl.lang(name: Enum<*>): Dsl = lang(name.name)
+
+fun Dsl.get(name: Enum<*>): String? = criteriaMap[name.name]
+
+fun Dsl.get(name: String): String? = criteriaMap[name]

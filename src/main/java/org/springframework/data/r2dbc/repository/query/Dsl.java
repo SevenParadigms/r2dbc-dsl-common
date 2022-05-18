@@ -15,9 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,6 +29,9 @@ import static org.apache.commons.lang3.StringUtils.SPACE;
  * @author Lao Tsing
  */
 public class Dsl implements Serializable {
+    public static final String COMMANDS = "(\\^\\^|!\\^|==|!=|>>|>=|<<|<=|~~|@@)";
+    public static final String PREFIX = "(!|@|!@)";
+    public static final String COMBINATORS = "(\\(|\\)|\")";
     public static final String COMMA = ",";
     public static final String COLON = ":";
 
@@ -555,5 +556,19 @@ public class Dsl implements Serializable {
     @JsonIgnore
     public int getCriteriaCount() {
         return getQuery().split(Dsl.COMMA).length - (getQuery().isEmpty() ? 1 : 0);
+    }
+
+    @JsonIgnore
+    public Map<String, String> getCriteriaMap() {
+        Map<String, String> map = new HashMap<>();
+        if (getQuery() != null && !getQuery().isEmpty()) {
+            String[] criterias = getQuery().split(Dsl.COMMA);
+            for (String criteria : criterias) {
+                if (ObjectUtils.isEmpty(criteria)) continue;
+                String[] pair = criteria.split(COMMANDS);
+                map.put(pair[0].replaceAll(PREFIX, "").replaceAll(COMBINATORS, ""), pair.length > 1 ? pair[1] : null);
+            }
+        }
+        return map;
     }
 }
