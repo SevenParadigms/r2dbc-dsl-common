@@ -204,30 +204,44 @@ public class Dsl implements Serializable {
         return this;
     }
 
-    public Dsl in(String field, UUID... ids) {
-        if (field != null && ids.length > 0) {
-            query = start(query) + field + in + Stream.of(ids).map(Object::toString).collect(Collectors.joining(SPACE));
+    public Dsl in(String field, UUID... values) {
+        if (field != null && values.length > 0) {
+            query = start(query) + field + in + Stream.of(values).map(Object::toString).collect(Collectors.joining(SPACE));
         }
         return this;
     }
 
-    public Dsl in(String field, @NonNull List<UUID> ids) {
-        return in(field, ids.toArray(new UUID[0]));
-    }
-
-    public Dsl in(String field, Number... ids) {
-        if (field != null && ids.length > 0) {
-            query = start(query) + field + in + Stream.of(ids).map(it ->
+    public Dsl in(String field, Number... values) {
+        if (field != null && values.length > 0) {
+            query = start(query) + field + in + Stream.of(values).map(it ->
                     (String) ConvertUtils.convert(it, String.class)).collect(Collectors.joining(SPACE));
         }
         return this;
     }
 
-    public Dsl in(String field, String... ids) {
-        if (field != null && ids.length > 0) {
-            query = start(query) + field + in + String.join(SPACE, ids);
+    public Dsl in(String field, String... values) {
+        if (field != null && values.length > 0) {
+            query = start(query) + field + in + String.join(SPACE, values);
         }
         return this;
+    }
+
+    public Dsl in(String field, @NonNull Collection<?> values) {
+        if (!values.isEmpty()) {
+            var value = values.stream().findFirst().get();
+            if (value instanceof UUID)
+                return in(field, values.toArray(new UUID[0]));
+            if (value instanceof Number)
+                return in(field, values.stream().map(id -> (String) ConvertUtils.convert(id, String.class))
+                        .collect(Collectors.joining(SPACE)));
+            if (value instanceof String)
+                return in(field, values.toArray(new String[0]));
+        }
+        return equals(field, "null");
+    }
+
+    public Dsl in(String field, @NonNull Set<?> values) {
+        return in(field, values.stream().collect(Collectors.toList()));
     }
 
     public Dsl notIn(String field, UUID... ids) {
@@ -235,10 +249,6 @@ public class Dsl implements Serializable {
             query = start(query) + field + notIn + Stream.of(ids).map(Object::toString).collect(Collectors.joining(SPACE));
         }
         return this;
-    }
-
-    public Dsl notIn(String field, @NonNull List<UUID> ids) {
-        return notIn(field, ids.toArray(new UUID[0]));
     }
 
     public Dsl notIn(String field, Number... ids) {
@@ -254,6 +264,24 @@ public class Dsl implements Serializable {
             query = start(query) + field + notIn + String.join(SPACE, ids);
         }
         return this;
+    }
+
+    public Dsl notIn(String field, @NonNull Collection<?> values) {
+        if (!values.isEmpty()) {
+            var value = values.stream().findFirst().get();
+            if (value instanceof UUID)
+                return notIn(field, values.toArray(new UUID[0]));
+            if (value instanceof Number)
+                return notIn(field, values.stream().map(id -> (String) ConvertUtils.convert(id, String.class))
+                        .collect(Collectors.joining(SPACE)));
+            if (value instanceof String)
+                return notIn(field, values.toArray(new String[0]));
+        }
+        return equals(field, "null");
+    }
+
+    public Dsl notIn(String field, @NonNull Set<?> values) {
+        return notIn(field, values.stream().collect(Collectors.toList()));
     }
 
     public Dsl id(String id) {
