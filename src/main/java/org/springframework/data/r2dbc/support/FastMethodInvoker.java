@@ -99,7 +99,14 @@ public final class FastMethodInvoker {
 				if (sourceValue != null && !sourceField.getType().equals(targetField.getType())) {
 					if (sourceValue instanceof Enum) {
 						sourceValue = Enum.valueOf((Class<? extends Enum>) targetField.getType(), ((Enum) sourceValue).name());
-					} else {
+					}
+					if (sourceValue instanceof HashMap && targetField.getType() == JsonNode.class) {
+						sourceValue = JsonUtils.mapToJson((Map) sourceValue);
+					}
+					if (sourceValue instanceof JsonNode && targetField.getType() == HashMap.class) {
+						sourceValue = JsonUtils.jsonToMap((JsonNode) sourceValue);
+					}
+					if (!sourceField.getType().equals(targetField.getType())) {
 						try {
 							sourceValue = stringToObject(ConvertUtils.convert(sourceValue), targetField.getType());
 						} catch (Exception ignore) {

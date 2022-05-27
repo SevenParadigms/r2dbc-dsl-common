@@ -45,4 +45,8 @@ fun ConcurrentMap<String, *>.copy(vararg sources: ConcurrentMap<String, *>): Con
 
 fun HashMap<String, Any?>.add(name: Enum<*>, value: Any?) = put(name.name, value)
 
+fun HashMap<String, Any?>.has(name: Enum<*>) = containsKey(name.name)
+
 fun ConcurrentHashMap<String, Any?>.add(name: Enum<*>, value: Any) = put(name.name, value)
+
+fun ConcurrentHashMap<String, Any?>.has(name: Enum<*>) = containsKey(name.name)

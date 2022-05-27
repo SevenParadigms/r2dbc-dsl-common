@@ -1,25 +1,22 @@
 package org.sevenparadigms.kotlin.common
 
-import com.fasterxml.jackson.databind.JsonNode
 import org.apache.commons.lang3.ObjectUtils
 import org.apache.commons.lang3.StringUtils
 import org.springframework.data.r2dbc.support.FastMethodInvoker
-import org.springframework.data.r2dbc.support.JsonUtils
-import org.springframework.lang.Nullable
 import java.lang.reflect.Field
 import java.util.*
 
-fun Any.setValue(name: String, @Nullable value: Any) = FastMethodInvoker.setValue(this, name, value)
+fun Any.setValue(name: String, value: Any?) = FastMethodInvoker.setValue(this, name, value)
 
 fun Any.getValue(name: String): Any? = FastMethodInvoker.getValue(this, name)
 
-inline fun <reified T> Any.getValue(name: String, cls: Class<T>): T = FastMethodInvoker.getValue(this, name, cls) as T
+inline fun <reified T> Any.getValue(name: String, cls: Class<T>): T? = FastMethodInvoker.getValue(this, name, cls) as T
 
 fun Any.setValue(name: Enum<*>, value: Any) = FastMethodInvoker.setValue(this, name.name, value)
 
 fun Any.getValue(name: Enum<*>): Any? = FastMethodInvoker.getValue(this, name.name)
 
-inline fun <reified T> Any.getValue(name: Enum<*>, cls: Class<T>): T = FastMethodInvoker.getValue(this, name.name, cls) as T
+inline fun <reified T> Any.getValue(name: Enum<*>, cls: Class<T>): T? = FastMethodInvoker.getValue(this, name.name, cls) as T
 
 inline fun <reified T> String.stringToObject(cls: Class<T>): T = FastMethodInvoker.stringToObject(this, cls) as T
 
